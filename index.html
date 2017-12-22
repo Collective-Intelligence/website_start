@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+       <link rel="stylesheet" href="css_file.css">
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+  </head>
+
+  <body>
+
+
+    <div id="main">
+
+      <div id="edit"></div>
+      <button onclick="edit_mode()" style="position: absolute; padding: 0px; margin: 0px; top: 0px; right: 100px;" id="edit_mode_button">Edit Mode</button>
+      <button onclick="save_edits()" style="position: absolute; padding: 0px; margin: 0px; top: 0px; right: 200px;"id="save_edit_button">Save Edits</button>
+
+      <div id="edit_add"></div>
+      <div id="edit_delete"></div>
+
+
+    </div>
+    <br><br><br><br>
+
+
+    <script  type="text/javascript" src="module.js"></script>
+    <script  type="text/javascript" src="interact.js"></script>
+
+    <script type="text/javascript"]>
+    var done = false
+    var all_possible_modules = [["thing1.html","type1"],["thing2.html","type1"],["thing3.html","type2"],["thing4.html","type3"],["thing5.html","type3"]]
+    var all_possible_themes = ["light"]
+    var catagories = ["type1","type2","type3","type4"]
+    var save_info = []
+    var module_info = [[0,0,"thing1.html","light"], [100,0,'thing2.html',"light"], [0,100,"thing3.html","light"],  [100,100,"thing4.html","light"]]
+    var old_info = module_info
+    var not_used = []
+    var used = []
+
+
+    for (i = 0; i < module_info.length; i++) {
+
+
+
+    }
+    build_modules(module_info)
+
+
+
+
+    </script>
+
+
+  </body>
+</html>
