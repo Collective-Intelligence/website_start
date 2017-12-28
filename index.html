@@ -20,8 +20,8 @@
       <button onclick="edit_mode()" style="position: absolute; padding: 0px; margin: 0px; top: 0px; right: 100px;" id="edit_mode_button">Edit Mode</button>
       <button onclick="save_edits()" style="position: absolute; padding: 0px; margin: 0px; top: 0px; right: 200px;"id="save_edit_button">Save Edits</button>
 
-      <div id="edit_add"></div>
-      <div id="edit_delete"></div>
+      <div id="edit_add" style="position: absolute; padding: 0px; margin: 0px; top: 0px; left: 400px;"></div>
+      <div id="edit_delete" style="position: absolute; padding: 0px; margin: 0px; top: 100px; left: 400px;"></div>
 
 
     </div>
@@ -30,17 +30,22 @@
 
     <script  type="text/javascript" src="module.js"></script>
     <script  type="text/javascript" src="interact.js"></script>
+    <script src="//cdn.steemjs.com/lib/latest/steem.min.js"></script>
+
 
     <script type="text/javascript"]>
     var done = false
-    var all_possible_modules = [["thing1.html","type1"],["thing2.html","type1"],["thing3.html","type2"],["thing4.html","type3"],["thing5.html","type3"]]
+    var all_possible_modules = [["curation_window.html","type1"],[ "account_info_basic.html",'type1'], ["delagation.html","type1"], ['token_window.html',"type2"]]
     var all_possible_themes = ["light"]
     var catagories = ["type1","type2","type3","type4"]
     var save_info = []
-    var module_info = [[0,0,"thing1.html","light"], [100,0,'thing2.html',"light"], [0,100,"thing3.html","light"],  [100,100,"thing4.html","light"]]
+    var module_info = []
     var old_info = module_info
     var not_used = []
     var used = []
+    var account_name = "ned"
+    var our_account_name = "anarchyhasnogods"
+    var steem_power_delagation_payout_rate = 0.01 //Steem per sp per week
 
 
     for (i = 0; i < module_info.length; i++) {

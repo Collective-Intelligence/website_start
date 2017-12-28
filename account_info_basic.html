@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html>
+
+<style>
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+</style>
+  <body>
+<p>Account: </p> <p id="account_name"></p>
+
+    <table>
+      <tr>
+        <th>Currency</th>
+        <th>Currently Owned</th>
+        <th>Awating payout</th>
+
+
+      </tr>
+
+
+      <tr>
+        <td>Steem</td>
+        <td id="steem_owned"></td>
+        <td id="steem_owed"></td>
+
+      </tr>
+
+      <tr>
+        <td>Steem Backed Dollars</td>
+        <td id="sbd_owned"></td>
+        <td id="sbd_owed"></td>
+      </tr>
+
+
+      <tr>
+        <td>Steem Power</td>
+        <td id="steemp_have"></td>
+        <td id="steemp_owed"></td>
+
+
+      </tr>
+
+      <tr>
+        <td>Gold</td>
+        <td id="gold_owned"></td>
+        <td id="gold_owed"></td>
+      </tr>
+
+
+
+
+
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+
+  <script type="text/javascript"]>
+
+  steem.api.getAccounts([account_name], function(err, result) {
+    var account_info = result
+
+    document.getElementById("steem_owned").innerHTML = result[0]["balance"]
+    document.getElementById("sbd_owned").innerHTML = result[0]["sbd_balance"]
+
+
+    console.log(result);
+    steem.api.getDynamicGlobalProperties(function(err, result) {
+
+
+      var steemPower = steem.formatter.vestToSteem(account_info[0]["vesting_shares"], parseInt(result.total_vesting_shares), parseInt(result.total_vesting_fund_steem));
+      document.getElementById("steemp_have").innerHTML = steemPower.toFixed(2) + "  Steem Power"
+
+    });
+
+
+  });
+
+
+
+
+
+
+</script>
+</html>

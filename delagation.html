@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+
+<style>
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+</style>
+  <body>
+
+    <table>
+      <tr>
+        <th>Currency</th>
+        <th>Currently Owned</th>
+        <th>Currently Delegated</th>
+        <th>Expected Payout</th>
+        <th> Rate </th>
+
+      </tr>
+
+
+      <tr>
+        <td>Steem Power</td>
+        <td id="steemp_have"></td>
+        <td id="steemp_delagated"></td>
+
+        <td id="expected_payout"></td>
+        <td id="steem_delagation_rate"></td>
+  </table>
+
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+
+  <script type="text/javascript"]>
+
+  steem.api.getAccounts([account_name], function(err, result) {
+    var account_info = result
+
+    steem.api.getDynamicGlobalProperties(function(err, result) {
+      var vesting = result.total_vesting_shares
+      var total_steem = result.total_vesting_fund_steem
+
+      var steemPower = steem.formatter.vestToSteem(account_info[0]["vesting_shares"], parseInt(result.total_vesting_shares), parseInt(result.total_vesting_fund_steem));
+      document.getElementById("steemp_have").innerHTML = steemPower.toFixed(2)
+    });
+
+
+
+
+
+  });
+
+
+
+  steem.api.getVestingDelegations(account_name, our_account_name, 1000, function(err, result) {
+    console.log(result);
+
+
+    var no_del = true
+    for(i=0; i < result.length; i++){
+
+      if(result[i]["delegatee"] == our_account_name){
+        steemPower = steem.formatter.vestToSteem(result[i]["vesting_shares"], parseInt(result.total_vesting_shares), parseInt(result.total_vesting_fund_steem));
+        document.getElementById("steemp_delagated").innerHTML =  steemPower
+
+        document.getElementById("expected_payout").innerHTML =  result[i]["vesting_shares"] * steem_power_delagation_payout_rate
+        document.getElementById("steem_delagation_rate").innerHTML =  steem_power_delagation_payout_rate
+
+
+        no_del = true
+
+
+
+
+
+
+      }
+      if(no_del){
+
+        document.getElementById("steemp_delagated").innerHTML =  0
+        document.getElementById("expected_payout").innerHTML =  0
+        document.getElementById("steem_delagation_rate").innerHTML = steem_power_delagation_payout_rate
+
+
+
+      }
+
+
+    }
+
+
+
+
+  });
+</script>
+</html>

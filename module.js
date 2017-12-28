@@ -5,6 +5,11 @@
 
 
 function build_modules(module_info){
+  if(module_info.length == 0){
+
+return
+
+  }
 
   var size = -1;
   for(i = 0; i <= 1000; i++){
@@ -107,13 +112,15 @@ function drop_down_populate() {
 
   //$("#edit_delete").load("dropdown.html");
 
-  for(c = 1001; c <= 2000; c++){
+  for(c = 1000; c <= 2000; c++){
 try{
+  document.getElementById(''+c).remove();
+}
+catch(err){
 
-  document.getElementById(''+c).remove();}
-catch(err){break}}
+  break}}
 
-for(c = 2001; c <= 3000; c++){
+for(c = 2000; c <= 3000; c++){
 try{
 document.getElementById(''+c).remove();}
 catch(err){break}}
@@ -254,22 +261,23 @@ edit_mode()
 
 function delete_module(module_name)  {
 
-for (i = 0; i < module_info.length; i++) {
+  for (i = 0; i < module_info.length; i++) {
 
-  try{
-  if (module_info[i][2] == module_name) {
-    document.getElementById(""+i).remove();
-    module_info.splice(i,1);
-    break
+    try{
+    if (module_info[i][2] == module_name) {
+      document.getElementById(""+i).remove();
+      module_info.splice(i,1);
 
-}}
+      break
+
+  }}
 
 
-catch(err){}
-}
-alert(module_name)
+  catch(err){}
 
-}
+
+  }
+build_modules(module_info)}
 
 
 function save_edits(){
@@ -304,11 +312,6 @@ while (myNode.firstChild) {
       interact(element_var).draggable();   // `qqfalse
       interact(element_var).resizable();
       interact(element_var).draggable(false);
-
-
-
-
-
 
 
 
