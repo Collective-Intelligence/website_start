@@ -62,14 +62,17 @@ return size;
 
 
 function drop_down_load() {
-
+if(drop_down_loaded == false){
 
 
 
 
   $("#edit_add").load("dropdown.html")
   $("#edit_delete").load("dropdown2.html")
-
+}
+not_used = []
+used = []
+drop_down_loaded = true
 
   var is_false = false
   for (i = 0; i < all_possible_modules.length; i++) {
@@ -115,15 +118,19 @@ function drop_down_populate() {
   for(c = 1000; c <= 2000; c++){
 try{
   document.getElementById(''+c).remove();
+  account.log(c)
 }
 catch(err){
 
-  break}}
+  }}
 
 for(c = 2000; c <= 3000; c++){
 try{
-document.getElementById(''+c).remove();}
-catch(err){break}}
+document.getElementById(''+c).remove();
+console.log(c)
+
+}
+catch(err){}}
 
 
   for(c=0; c < not_used.length; c++){
@@ -249,7 +256,7 @@ function add_module(module_){
 
 
 
-module_info.push([0,0,module_, "light"])
+module_info.push([0 ,0 ,module_, "light"])
 
 build_modules(module_info)
 
@@ -281,6 +288,7 @@ build_modules(module_info)}
 
 
 function save_edits(){
+  drop_down_loaded = false
   document.getElementById('edit_mode_button').style.visibility = 'visible';
   document.getElementById('save_edit_button').style.visibility = 'hidden';
 
