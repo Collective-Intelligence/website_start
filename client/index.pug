@@ -12,12 +12,16 @@ head
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width")
         
-    script(src="/scripts/client.js")
-    script(src="/scripts/handlebars.js")
-    script(src="/scripts/page.js")
+    script(src="scripts/client.js")
+    script(src="scripts/handlebars.js")
+    script(src="scripts/page.js")
     
     // Handlebars Templates
-    
+    script#template__account(type="text/x-handlebars-template"): include ../templates/account.hbs
+    script#template__delegation(type="text/x-handlebars-template"): include ../templates/delegation.hbs
+    script#template__dropdown(type="text/x-handlebars-template"): include ../templates/dropdown.hbs
+    script#template__dropdown2(type="text/x-handlebars-template"): include ../templates/dropdown2.hbs
+    script#template__tokens(type="text/x-handlebars-template"): include ../templates/tokens.hbs
 
 body
     
