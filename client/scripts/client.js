@@ -42,10 +42,22 @@ _ci         = (CollectiveIntelligence = new(function(){
     setInterval(function(){
         var ts = document.getElementsByClassName('timestamp');
         for(let i in ts)
-            if(!isNaN(parseInt(ts[i].getAttribute('unix-time'))))
+            if(typeof ts[i].getAttribute == 'function'
+            && !isNaN(parseInt(ts[i].getAttribute('unix-time'))))
                 ts[i].innerHTML = _ci.time(ts[i].getAttribute('unix-time'));
     },1e3);
 })());
+_ci.t       = (_ci.theme = {        //  Maniplate the page theme
+    isMenuOpen    : false,
+    menu(){
+        _c("side")[0].style.left = !(this.isMenuOpen = !this.isMenuOpen)
+            ?"-220px"
+            :"-20px";
+        _c("side")[0].style.transitionTimingFunction = !this.isMenuOpen
+            ? "cubic-bezier(0.7, 0.0, 1.0, 1.0)"
+            : "cubic-bezier(0.5, 0.0, 0.0, 1.5)";
+    }
+});
 _ci.tp      = (_ci.templates = {    //  Handlebars templates
     account     : _h('account'),
     curation    : _h('curation'),
