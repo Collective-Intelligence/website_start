@@ -1,6 +1,6 @@
 <!--Collective Intelligence main index page
 @author Una Ada <una@phene.co>
---><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"></html><head><title>Creative Intelligence</title><link rel="stylesheet" href="assets/css/main.css"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width"><script src="scripts/client.js"></script><script src="scripts/handlebars.js"></script><script src="scripts/page.js"></script><!-- Handlebars Templates--><script id="template__account" type="text/x-handlebars-template"><p>Account: </p>
+--><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"></html><head><title>Collective Intelligence</title><link rel="stylesheet" href="assets/style/main.css"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width"><!--  Load Libraries--><script src="scripts/handlebars.js"></script><script src="scripts/page.js"></script><!--  Handlebars Templates--><script id="template__account" type="text/x-handlebars-template"><p>Account: </p>
 <p id="account_name"></p>
 <table>
     <tr>
@@ -29,6 +29,10 @@
         <td id="gold_owed"></td>
     </tr>
 </table>
+</script><script id="template__curation" type="text/x-handlebars-template"><div class="slidecontainer">
+    <p>Default range slider:</p>
+    <input type="range" min="1" max="100" value="50">
+</div>
 </script><script id="template__delegation" type="text/x-handlebars-template"><table>
 <tr>
     <th>Currency</th>
@@ -184,4 +188,4 @@ $(document).ready(function(){
         </tr>
     </table>
 </div>
-</script></head><body></body>
+</script><!--  Client Script--><script src="scripts/client.js"></script></head><body></body>

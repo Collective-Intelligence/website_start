@@ -3,11 +3,16 @@
  *  @author Una Ada (Trewbot) <una@phene.co>
  */
 
+window._c = function(c){return document.getElementsByClassName(c);}
+//  Abbreviated function for HAndlebars template compiling
+window._h = function(i){return Handlebars.compile(_i('template__'+i).innerHTML)};
+window._i = function(i){return document.getElementById(i);}
+
 /**
  *  Namespace for client scripts (abbreviated as _ci)
  *  @namespace CollectiveIntelligence
  */
-window._ci = (CollectiveIntelligence = new(function(){
+_ci         = (CollectiveIntelligence = new(function(){
     /**
      *  @function time
      *  @arg {Number} unix Unix timestamp in milliseconds.
@@ -16,7 +21,7 @@ window._ci = (CollectiveIntelligence = new(function(){
      */
     this.time	= function(unix, HE=!1){
         var ago = ~~(+new Date/1e3)-(unix/1e3),
-            num = {1:'',60:' second',3600:' minute'
+            num = {1:'',60:' second',3600:' minute',
                     86400:' hour',2678400:' day'},
             k	= Object.keys(num),
             s;
@@ -41,6 +46,17 @@ window._ci = (CollectiveIntelligence = new(function(){
                 ts[i].innerHTML = _ci.time(ts[i].getAttribute('unix-time'));
     },1e3);
 })());
+_ci.tp      = (_ci.templates = {    //  Handlebars templates
+    account     : _h('account'),
+    curation    : _h('curation'),
+    delegation  : _h('delegation'),
+    dropdown    : _h('dropdown'),
+    dropdown2   : _h('dropdown2'),
+    tokens      : _h('tokens')
+});
+_ci.u       = (_ci.users = {        //  Account information and interaction
+
+});
 
 /**
  *  Twitter Snowflake implementation
