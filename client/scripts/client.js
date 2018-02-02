@@ -57,7 +57,7 @@ _ci.t       = (_ci.theme = {        //  Maniplate the page theme
             ? "cubic-bezier(0.7, 0.0, 1.0, 1.0)"
             : "cubic-bezier(0.5, 0.0, 0.0, 1.5)";
     },
-    sidebar(){
+    side(ctx,next){
         _ci.u.getSession(function(sess){
             _ci.session = sess;
             var o = {
@@ -66,41 +66,42 @@ _ci.t       = (_ci.theme = {        //  Maniplate the page theme
                         links: [
                             {
                                 name: "Dashboard",
-                                url: "#"
+                                url: "/"
                             },
                             {
                                 name: "Curation",
-                                url: "#"
+                                url: "/curation"
                             },
                             {
                                 name: "Goups",
-                                url: "#"
+                                url: "/groups"
                             },
                             {
                                 name: "Debates",
-                                url: "#"
+                                url: "/debates"
                             },
                             {
                                 name: "Delegations",
-                                url: "#"
+                                url: "/delegations"
                             },
                             {
                                 name: "Rewards",
-                                url: "#"
+                                url: "/rewards"
                             },
                             {
                                 name: "Account",
-                                url: "#"
+                                url: "/account"
                             },
                             {
                                 name: "Settings",
-                                url: "#"
+                                url: "/settings"
                             }
                         ]
                     }
                 ]
             };
             _c('side__content')[0].innerHTML = _ci.tp.sidebar(o);
+            next();
         });
     }
 });
@@ -138,3 +139,10 @@ window.Snowflake = new (function(epoch){
 
 
 //  Page.js implementations
+page('*',_ci.t.side)
+page('/', (ctx,next)=>{
+
+    next();
+});
+
+window.addEventListener('load',()=>page());

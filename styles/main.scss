@@ -118,6 +118,17 @@ $shadow-24dp:
 	0 24px 38px 3px rgba(0,0,0,.14),
 	0 9px 46px 8px rgba(0,0,0,.12);
 
+//	Generics
+* {
+	margin:0px;
+	zoom:1;
+	font-size:10pt;
+}
+html {
+	background:#f8f8f8 url("../img/back.png");
+	font-family:'Noto Sans',sans-serif;
+}
+
 //	Models (ordered by height)
 .icon {
 	color:#ccc;
