@@ -111,6 +111,25 @@ $(document).ready(function(){
         </li>
     </ul>
 </div>
+</script><script id="template__sidebar" type="text/x-handlebars-template">{{#each sections}}
+	{{#if name}}
+		{{#if url}}<a href="{{url}}" title="{{tooltip}}" nocard>{{/if}}<div class="side__title"><b>{{name}}</b></div>{{#if url}}</a>{{/if}}
+	{{/if}}
+	{{#each links}}
+		{{#if tabled}}
+			<a href="{{url}}" nocard><div class="side__link {{#if active}}side-select{{/if}}">
+				<table>
+					<tr>
+						<td style="width:100%;">{{name}}</td>
+						<td>{{value}}</td>
+					</tr>
+				</table>
+			</div></a>
+		{{else}}
+			<a href="{{url}}" nocard><div class="side__link {{#if active}}side__select{{/if}}">{{name}}</div></a>
+		{{/if}}
+	{{/each}}
+{{/each}}
 </script><script id="template__tokens" type="text/x-handlebars-template"><table>
     <center>
         <tr>
@@ -188,4 +207,4 @@ $(document).ready(function(){
         </tr>
     </table>
 </div>
-</script><!--  Client Script--><script src="scripts/client.js"></script></head><body><div class="side"><div class="drawer side__bar"></div></div></body>
+</script><!--  Client Script--><script src="scripts/client.js"></script></head><body><div class="side"><div class="drawer side__bar"><div class="side__content"></div></div></div></body>

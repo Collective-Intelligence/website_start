@@ -204,3 +204,10 @@ $shadow-24dp:
 	top:-100px;
 	width:230px;
 }
+.side__content {
+	left:20px;
+	padding:10px;
+	position:absolute;
+	top:210px;
+	width:calc(100% - 40px);
+}

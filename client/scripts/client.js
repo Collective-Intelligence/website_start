@@ -48,14 +48,60 @@ _ci         = (CollectiveIntelligence = new(function(){
     },1e3);
 })());
 _ci.t       = (_ci.theme = {        //  Maniplate the page theme
-    isMenuOpen    : false,
-    menu(){
+    isMenuOpen    : false,          //  If sidebar menu is open
+    menu(){                         //  Toggle sidebar menu open/close
         _c("side")[0].style.left = !(this.isMenuOpen = !this.isMenuOpen)
             ?"-220px"
             :"-20px";
         _c("side")[0].style.transitionTimingFunction = !this.isMenuOpen
             ? "cubic-bezier(0.7, 0.0, 1.0, 1.0)"
             : "cubic-bezier(0.5, 0.0, 0.0, 1.5)";
+    },
+    sidebar(){
+        _ci.u.getSession(function(sess){
+            _ci.session = sess;
+            var o = {
+                sections: [
+                    {
+                        links: [
+                            {
+                                name: "Dashboard",
+                                url: "#"
+                            },
+                            {
+                                name: "Curation",
+                                url: "#"
+                            },
+                            {
+                                name: "Goups",
+                                url: "#"
+                            },
+                            {
+                                name: "Debates",
+                                url: "#"
+                            },
+                            {
+                                name: "Delegations",
+                                url: "#"
+                            },
+                            {
+                                name: "Rewards",
+                                url: "#"
+                            },
+                            {
+                                name: "Account",
+                                url: "#"
+                            },
+                            {
+                                name: "Settings",
+                                url: "#"
+                            }
+                        ]
+                    }
+                ]
+            };
+            _c('side__content')[0].innerHTML = _ci.tp.sidebar(o);
+        });
     }
 });
 _ci.tp      = (_ci.templates = {    //  Handlebars templates
@@ -64,10 +110,18 @@ _ci.tp      = (_ci.templates = {    //  Handlebars templates
     delegation  : _h('delegation'),
     dropdown    : _h('dropdown'),
     dropdown2   : _h('dropdown2'),
+    sidebar     : _h('sidebar'),
     tokens      : _h('tokens')
 });
 _ci.u       = (_ci.users = {        //  Account information and interaction
-
+    /**
+     *  @function getSession
+     *  @arg {Function} next Callback function, should have
+     *  @return {Object} Object containing data about current session
+     */
+    getSession(next){
+        next({});
+    }
 });
 
 /**

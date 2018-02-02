@@ -7,7 +7,9 @@
   "scripts": {
     "start": "app.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.16.2"
+  },
   "bugs": {
     "url": "https://github.com/anarchyhasnogods/website_start/issues"
   },
