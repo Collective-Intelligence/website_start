@@ -8,6 +8,54 @@ window._c = function(c){return document.getElementsByClassName(c);}
 window._h = function(i){return Handlebars.compile(_i('template__'+i).innerHTML)};
 window._i = function(i){return document.getElementById(i);}
 
+Element.prototype._c = function(c){return this.getElementsByClassName(c);}
+Element.prototype.fitContent = function(){
+    var l = ['change','cut','paste','drop','keydown'];
+    for(var i in l) this.addEventListener(l[i], resize.bind(this), !1);
+}
+Element.prototype.responsibleParent = function(){
+    var t = this;
+    if(t == null)
+        return false;
+    try{
+        while(t.tagName.toLowerCase() !== 'html'){
+            if(~t.className.indexOf('has-responder'))
+                return t;
+            t = t.parentElement;
+        }
+    }catch(e){}
+    return false;
+}
+HTMLTextAreaElement.prototype.insertAtCaret = function(text){
+    text = text || '';
+    if(document.selection){
+        this.focus();
+        var sel		= document.selection.createRange();
+        sel.text	= text;
+    }else if(this.selectionStart || this.selectionStart === 0){
+        var start	= this.selectionStart,
+            end		= this.selectionEnd;
+        this.value = this.value.substring(0, start) + text + this.value.substring(end, this.value.length);
+        this.selectionStart = start + text.length;
+        this.selectionEnd = start + text.length;
+    }else this.value += text;
+};
+Handlebars.registerHelper('ifCond', function(u,s,v,o){
+    return eval(u + s + v) ? o.fn(this) : o.inverse(this);
+});
+Handlebars.registerHelper('strCompare', function(u,v,o){
+    return u == v ? o.fn(this) : o.inverse(this);
+});
+Object.collect= function(){
+    var ret = {},
+        len = arguments.length;
+    for(var i = 0; i < len; i++)
+        for(p in arguments[i])
+            if(arguments[i].hasOwnProperty(p))
+                ret[p] = arguments[i][p];
+    return ret;
+};
+
 /**
  *  Namespace for client scripts (abbreviated as _ci)
  *  @namespace CollectiveIntelligence
@@ -47,6 +95,43 @@ _ci         = (CollectiveIntelligence = new(function(){
                 ts[i].innerHTML = _ci.time(ts[i].getAttribute('unix-time'));
     },1e3);
 })());
+_ci.tp      = (_ci.templates = {    //  Handlebars templates
+    account     : _h('account'),
+    curation    : _h('curation'),
+    delegation  : _h('delegation'),
+    dropdown    : _h('dropdown'),
+    dropdown2   : _h('dropdown2'),
+    sidebar     : _h('sidebar'),
+    tokens      : _h('tokens'),
+
+    test        : _h('test')
+});
+_ci.m       = (_ci.modules = {      //  Module information
+    test1   : {
+        name: "Test Module 1",
+        template: _ci.tp.test
+    },
+    test2   : {
+        name: "Test Module 2",
+        template: _ci.tp.test
+    },
+    test3   : {
+        name: "Test Module 3",
+        template: _ci.tp.test
+    },
+    test4   : {
+        name: "Test Module 4",
+        template: _ci.tp.test
+    },
+    test5   : {
+        name: "Test Module 5",
+        template: _ci.tp.test
+    },
+    test6   : {
+        name: "Test Module 6",
+        template: _ci.tp.test
+    }
+});
 _ci.t       = (_ci.theme = {        //  Maniplate the page theme
     isMenuOpen    : false,          //  If sidebar menu is open
     menu(){                         //  Toggle sidebar menu open/close
@@ -105,15 +190,6 @@ _ci.t       = (_ci.theme = {        //  Maniplate the page theme
         });
     }
 });
-_ci.tp      = (_ci.templates = {    //  Handlebars templates
-    account     : _h('account'),
-    curation    : _h('curation'),
-    delegation  : _h('delegation'),
-    dropdown    : _h('dropdown'),
-    dropdown2   : _h('dropdown2'),
-    sidebar     : _h('sidebar'),
-    tokens      : _h('tokens')
-});
 _ci.u       = (_ci.users = {        //  Account information and interaction
     /**
      *  @function getSession
@@ -122,6 +198,48 @@ _ci.u       = (_ci.users = {        //  Account information and interaction
      */
     getSession(next){
         next({});
+    }
+});
+_ci.ui      = (_ci.interface = {    //  User interface rendering and events
+    /*
+     *  Default column arrangement, overridden by user settings
+     *      `center` if the column should be centered in the screen, only one
+     *          column can have this flag, ignored if the total width of all
+     *          columns is wider than the screen
+     *      `contains` an array of all modules contained in the column
+     *      `width` the width of the column in pixels
+     */
+    columns : [
+        {
+            contains: [
+                "test1",
+                "test2",
+                "test3"
+            ],
+            width: 210
+        },
+        {
+            center: true,
+            containts: [
+                "test4"
+            ],
+            width: 500
+        },
+        {
+            contains: [
+                "test5",
+                "test6"
+            ],
+            width: 210
+        }
+    ],
+    /**
+     *  @function ui.buildModule Wrappr for buildign modules
+     *  @arg {String} name Name of the module to be built
+     *  @return {String} HTML string for the built module
+     */
+    buildModule(name){
+        return _ci.m[name].template(Object.collect(_ci.m[name],{id:name}));
     }
 });
 
