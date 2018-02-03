@@ -4,15 +4,29 @@
  */
 
 window._c = function(c){return document.getElementsByClassName(c);}
+Element.prototype._c = function(c){return this.getElementsByClassName(c);}
 //  Abbreviated function for HAndlebars template compiling
 window._h = function(i){return Handlebars.compile(_i('template__'+i).innerHTML)};
 window._i = function(i){return document.getElementById(i);}
 
-Element.prototype._c = function(c){return this.getElementsByClassName(c);}
+//  Resize an element to show all of its content
 Element.prototype.fitContent = function(){
     var l = ['change','cut','paste','drop','keydown'];
     for(var i in l) this.addEventListener(l[i], resize.bind(this), !1);
 }
+window.resize = function(){
+    window.setTimeout((function(){
+        var t = this,
+            c = t.cloneNode();
+        t.parentNode.insertBefore(c, t);
+        c.style.height = 'auto';
+        c.value = t.value;
+        t.style.height = (c.scrollTop + c.scrollHeight + 20) + 'px';
+        t.parentNode.removeChild(c);
+    }).bind(this), 0);
+}
+
+//  Render a responder element to show click responses
 Element.prototype.responsibleParent = function(){
     var t = this;
     if(t == null)
@@ -26,6 +40,28 @@ Element.prototype.responsibleParent = function(){
     }catch(e){}
     return false;
 }
+window.lastClick = {x:0,y:0};
+window.addEventListener('click',function(e){
+    window.lastClick.x = e.pageX;
+    window.lastClick.y = e.pageY;
+    var rsp = e.target.responsibleParent();
+    if(rsp){
+        var rpr = rsp._c('responder')[0],
+            rct = rsp.getBoundingClientRect(),
+            xPos = e.clientX - rct.left,
+            yPos = e.clientY - rct.top,
+            rad = Math.sqrt(Math.pow(rct.width,2) + Math.pow(rct.height,2));
+        rpr.style.transition = "";
+        rpr.style.webkitClipPath = "circle(0% at "+xPos+"px "+yPos+"px)";
+        rpr.style.opacity = 1;
+        window.setTimeout(function(){
+            rpr.style.transitionDuration = "1.0s";
+            rpr.style.webkitClipPath = "circle(" + rad + "px at "+xPos+"px "+yPos+"px)";
+            rpr.style.opacity = 0;
+        },10);
+    }
+});
+
 HTMLTextAreaElement.prototype.insertAtCaret = function(text){
     text = text || '';
     if(document.selection){
@@ -216,21 +252,21 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                 "test2",
                 "test3"
             ],
-            width: 210
+            width: 300
         },
         {
             center: true,
             contains: [
                 "test4"
             ],
-            width: 500
+            width: 300
         },
         {
             contains: [
                 "test5",
                 "test6"
             ],
-            width: 210
+            width: 300
         }
     ],
     /**
