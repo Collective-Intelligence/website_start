@@ -220,7 +220,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         },
         {
             center: true,
-            containts: [
+            contains: [
                 "test4"
             ],
             width: 500
@@ -240,6 +240,35 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
      */
     buildModule(name){
         return _ci.m[name].template(Object.collect(_ci.m[name],{id:name}));
+    },
+    /**
+     *  @function ui.load Load the basic UI structure
+     *  @arg {Object} options Settings for the rendering based on page to load
+     */
+    load(options){
+        var left = 0;
+        //  Check if #body exists or not
+        if(!_i('body')) document.body.insertAdjacentHTML('beforeend', '<div id="body"></div>');
+        //  If #body is empty, add columns
+        if(_i('body').innerHTML == '')
+            for(var i in _ci.ui.columns){
+                _i('body').innerHTML += `<div class="column" id="column-${i}" style="left:calc(${left}px + ${i*2}rem);width:${_ci.ui.columns[i].width}px"></div>`;
+                left += _ci.ui.columns[i].width;
+            }
+        for(var i in _ci.ui.columns)
+            for(var j in _ci.ui.columns[i].contains)
+                if(!_i("module-"+_ci.ui.columns[i].contains[j]))
+                    _i("column-"+i).insertAdjacentHTML('beforeend', _ci.ui.buildModule(_ci.ui.columns[i].contains[j]));
+        _ci.ui.update();
+    },
+    /**
+     *  @function ui.update Updates the UI based on current conditions
+     */
+    update(){
+        var ctr,left;
+        for(var i in _ci.ui.columns)
+            if(_ci.ui.columns[i].center) ctr = _i('body')._c('column')[i].getBoundingClientRect();
+        _i('body').style.left = Math.max(40,((window.innerWidth / 2) - (ctr.width / 2) - (ctr.left - _i('body').getBoundingClientRect().left))) + 'px';
     }
 });
 
@@ -259,7 +288,9 @@ window.Snowflake = new (function(epoch){
 //  Page.js implementations
 page('*',_ci.t.side)
 page('/', (ctx,next)=>{
-
+    _ci.ui.load({
+        modules: ["test1","test2","test3","test4","test5","test6"]
+    });
     next();
 });
 

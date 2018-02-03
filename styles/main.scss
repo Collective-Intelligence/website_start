@@ -129,6 +129,16 @@ html {
 	font-family:'Noto Sans',sans-serif;
 }
 
+//	Page Layout
+#body {
+	padding-top:40px;
+	position:absolute;
+}
+.column {
+	min-height:1px;
+	position:absolute;
+}
+
 //	Models (ordered by height)
 .icon {
 	color:#ccc;
@@ -194,6 +204,9 @@ html {
 }
 
 //	Implementations
+.module {
+
+}
 .side {
 	height:100%;
 	left:-220px;
@@ -205,6 +218,9 @@ html {
 }
 
 //	Elements
+.module__content {
+	padding:1rem;
+}
 .side__bar {
 	background:#fff;
 	border:0 !important;
