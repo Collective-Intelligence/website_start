@@ -269,6 +269,27 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             width: 300
         }
     ],
+    moduleDrag : {
+        /**
+         *  @function ui.moduleDrag.startDrag Handler for dragging modules
+         *  @arg {Event} e dragStart event
+         */
+        startDrag(e){
+            console.log(e);
+            e.currentTarget.classList.add("is-lifted");
+            //e.currentTarget.style.transform = "translateX(-100vw)";
+            e.dataTransfer.dropEffect = "move";
+        },
+        /**
+         *  @function ui.moduleDrag.endDrag Handler for after element is dragged
+         *  @arg {Event} e dragEnd event
+         */
+        endDrag(e){
+            console.log(e);
+            e.currentTarget.classList.remove("is-lifted");
+            //e.currentTarget.style.transform = "";
+        }
+    },
     /**
      *  @function ui.buildModule Wrappr for buildign modules
      *  @arg {String} name Name of the module to be built

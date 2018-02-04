@@ -1,4 +1,10 @@
-<div class="card module" id="module-{{id}}" draggable>
+<div
+    class="card module"
+    id="module-{{id}}"
+    draggable="true"
+    ondragstart="_ci.ui.moduleDrag.startDrag(event)"
+    ondragend="_ci.ui.moduleDrag.endDrag(event)"
+>
     <div class="module__content">
         <p>{{name}}</p>
     </div>
