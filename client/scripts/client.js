@@ -295,7 +295,21 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             for(var j in _ci.ui.columns[i].contains)
                 if(!_i("module-"+_ci.ui.columns[i].contains[j]))
                     _i("column-"+i).insertAdjacentHTML('beforeend', _ci.ui.buildModule(_ci.ui.columns[i].contains[j]));
+        _ci.ui.loadSearch();
         _ci.ui.update();
+    },
+    /**
+     *  @function ui.loadSearch Handle events on search bar
+     */
+    loadSearch(){
+        _c('search__input')[0].addEventListener('focus',function(){
+            window.setTimeout(function(){
+                _c('button search has-responder')[0].className = 'button search is-lifted';
+            },200);
+        });
+        _c('search__input')[0].addEventListener('blur',function(){
+            _c('button search is-lifted')[0].className = 'button search has-responder';
+        });
     },
     /**
      *  @function ui.update Updates the UI based on current conditions

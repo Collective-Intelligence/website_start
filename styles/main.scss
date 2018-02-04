@@ -157,9 +157,14 @@ html {
 .button {
 	z-index:200;
 	box-shadow:$shadow-2dp;
-}
-.button.is-secondary {
-	background:#757575 !important;
+	transition:box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+	&.is-lifted {
+		z-index:800;
+		box-shadow:$shadow-8dp;
+	}
+	&.is-secondary {
+		background:#757575 !important;
+	}
 }
 .card {
 	z-index:200;
@@ -169,10 +174,10 @@ html {
 	background:#fff;
 	margin-bottom:2rem;
 	transition:box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
-}
-.card.is-lifted {
-	z-index:800;
-	box-shadow:$shadow-8dp;
+	&.is-lifted {
+		z-index:800;
+		box-shadow:$shadow-8dp;
+	}
 }
 .menu {
 	z-index:800;
