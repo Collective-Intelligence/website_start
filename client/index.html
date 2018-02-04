@@ -210,9 +210,7 @@ $(document).ready(function(){
 </script><script id="template__test" type="text/x-handlebars-template"><div
     class="card module"
     id="module-{{id}}"
-    draggable="true"
-    ondragstart="_ci.ui.moduleDrag.startDrag(event)"
-    ondragend="_ci.ui.moduleDrag.endDrag(event)"
+    onmousedown="_ci.ui.moduleDrag.mouseDown(event)"
 >
     <div class="module__content">
         <p>{{name}}</p>

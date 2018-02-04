@@ -91,6 +91,19 @@ Object.collect= function(){
                 ret[p] = arguments[i][p];
     return ret;
 };
+Element.prototype.parentModule = function(){
+    var t = this;
+    if(t == null)
+        return false;
+    try{
+        while(t.tagName.toLowerCase() !== 'html'){
+            if(t.classList.contains('module'))
+                return t;
+            t = t.parentElement;
+        }
+    }catch(e){}
+    return false;
+}
 
 /**
  *  Namespace for client scripts (abbreviated as _ci)
@@ -259,7 +272,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             contains: [
                 "test4"
             ],
-            width: 300
+            width: 500
         },
         {
             contains: [
@@ -270,24 +283,78 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         }
     ],
     moduleDrag : {
+        offsets : {x:0,y:0},
+        target : 0,
+        //  Timer id stored for convenience
+        timer : 0,
+        width: 0,
+        /**
+         *  @function ui.moduleDrag.mouseDown Start timer to begin drag
+         *  @arg {Event} e mouseDown event
+         */
+        mouseDown(e){
+            _ci.ui.moduleDrag.timer = window.setTimeout(_ci.ui.moduleDrag.startDrag,1e3);
+            window.addEventListener("mouseup",_ci.ui.moduleDrag.mouseClear);
+            window.setTimeout(()=>{
+                window.addEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
+            },20);
+            let el = e.target.parentModule(),
+                br = el.getBoundingClientRect();
+            el.style.left = br.left + "px";
+            el.style.top = br.top + "px";
+            _ci.ui.moduleDrag.offset = {
+                x: e.pageX-br.left,
+                y: e.pageY-br.top
+            };
+            _ci.ui.moduleDrag.target = el;
+            _ci.ui.moduleDrag.width = br.width;
+            el.style.width = br.width + "px";
+        },
+        /**
+         *  @function ui.moduleDrag.mouseClear Clear all mouse events
+         */
+        mouseClear(){
+            window.clearTimeout(_ci.ui.moduleDrag.timer);
+            window.removeEventListener("mouseup",_ci.ui.moduleDrag.mouseClear);
+            window.removeEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
+        },
         /**
          *  @function ui.moduleDrag.startDrag Handler for dragging modules
-         *  @arg {Event} e dragStart event
          */
-        startDrag(e){
-            console.log(e);
-            e.currentTarget.classList.add("is-lifted");
-            //e.currentTarget.style.transform = "translateX(-100vw)";
-            e.dataTransfer.dropEffect = "move";
+        startDrag(){
+            window.removeEventListener("mouseup",_ci.ui.moduleDrag.mouseClear);
+            window.removeEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
+            window.addEventListener("mousemove",_ci.ui.moduleDrag.drag);
+            window.addEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
+            let e = _ci.ui.moduleDrag.target;
+            e.style.width = _ci.ui.moduleDrag.width + "px";
+            e.classList.add("is-lifted");
+            e.classList.add("is-dragging");
+        },
+        /**
+         *  @function ui.moduleDrag.drag Handle dragging module
+         *  @arg {Event} e movemoce event
+         */
+        drag(e){
+            let el = _ci.ui.moduleDrag.target;
+            el.style.width = _ci.ui.moduleDrag.width + "px";
+            for(let i in _ci.ui.columns){
+                let br = _i("column-"+i).getBoundingClientRect();
+                if(e.pageX > br.left && e.pageX < br.left + br.width)
+                    el.style.width = _ci.ui.columns[i].width + "px";
+            }
+            el.style.left = e.pageX - _ci.ui.moduleDrag.offset.x + "px";
+            el.style.top = e.pageY - _ci.ui.moduleDrag.offset.y + "px";
         },
         /**
          *  @function ui.moduleDrag.endDrag Handler for after element is dragged
          *  @arg {Event} e dragEnd event
          */
-        endDrag(e){
-            console.log(e);
-            e.currentTarget.classList.remove("is-lifted");
-            //e.currentTarget.style.transform = "";
+        endDrag(){
+            window.removeEventListener("mousemove",_ci.ui.moduleDrag.drag);
+            window.removeEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
+            _ci.ui.moduleDrag.target.classList.remove("is-lifted");
+            _ci.ui.moduleDrag.target.classList.remove("is-dragging");
         }
     },
     /**
