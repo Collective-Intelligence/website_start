@@ -124,6 +124,11 @@ $shadow-24dp:
 	zoom:1;
 	font-size:10pt;
 }
+body {
+	&.is-dragging {
+		user-select: none;
+	}
+}
 html {
 	background:#f8f8f8 url("../img/back.png");
 	font-family:'Noto Sans',sans-serif;
@@ -142,7 +147,7 @@ html {
 	margin-bottom: 2rem;
 	position: relative;
 	&.is-empty {
-		background: rgba(100,100,100,0.3);
+		// background: rgba(100,100,100,0.3);
 	}
 }
 

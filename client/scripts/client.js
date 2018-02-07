@@ -327,6 +327,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             window.removeEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
             window.addEventListener("mousemove",_ci.ui.moduleDrag.drag);
             window.addEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
+            document.getElementsByTagName("body")[0].classList.add("is-dragging");
             let e = _ci.ui.moduleDrag.target;
             e.style.width = _ci.ui.moduleDrag.width + "px";
             e.classList.add("is-lifted");
@@ -389,6 +390,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         endDrag(){
             window.removeEventListener("mousemove",_ci.ui.moduleDrag.drag);
             window.removeEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
+            document.getElementsByTagName("body")[0].classList.remove("is-dragging");
             _ci.ui.moduleDrag.target.classList.remove("is-lifted");
             _ci.ui.moduleDrag.target.classList.remove("is-dragging");
             let empties = _c("is-empty");
@@ -398,7 +400,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         }
     },
     /**
-     *  @function ui.buildModule Wrappr for buildign modules
+     *  @function ui.buildModule Wrapper for building modules
      *  @arg {String} name Name of the module to be built
      *  @return {String} HTML string for the built module
      */
