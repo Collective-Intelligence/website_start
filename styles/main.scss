@@ -138,6 +138,10 @@ html {
 	min-height:1px;
 	position:absolute;
 }
+.mFrame {
+	margin-bottom: 2rem;
+	position: relative;
+}
 
 //	Models (ordered by height)
 .icon {
@@ -172,7 +176,7 @@ html {
 	width: 100%;
 	display: inline-block;
 	background: #fff;
-	margin-bottom: 2rem;
+	// margin-bottom: 2rem;
 	transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1),
 				width 0.2s cubic-bezier(.25,.8,.25,1);
 	&.is-lifted {
@@ -215,6 +219,7 @@ html {
 
 //	Implementations
 .module {
+	position: absolute;
 	.module__content {
 		padding: 1rem;
 	}

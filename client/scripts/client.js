@@ -145,14 +145,13 @@ _ci         = (CollectiveIntelligence = new(function(){
     },1e3);
 })());
 _ci.tp      = (_ci.templates = {    //  Handlebars templates
-    account     : _h('account'),
-    curation    : _h('curation'),
-    delegation  : _h('delegation'),
-    dropdown    : _h('dropdown'),
-    dropdown2   : _h('dropdown2'),
+    //account     : _h('account'),
+    //curation    : _h('curation'),
+    //delegation  : _h('delegation'),
+    //dropdown    : _h('dropdown'),
+    //dropdown2   : _h('dropdown2'),
     sidebar     : _h('sidebar'),
-    tokens      : _h('tokens'),
-
+    //tokens      : _h('tokens'),
     test        : _h('test')
 });
 _ci.m       = (_ci.modules = {      //  Module information
@@ -250,6 +249,7 @@ _ci.u       = (_ci.users = {        //  Account information and interaction
     }
 });
 _ci.ui      = (_ci.interface = {    //  User interface rendering and events
+    register : {},
     /*
      *  Default column arrangement, overridden by user settings
      *      `center` if the column should be centered in the screen, only one
@@ -283,11 +283,10 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         }
     ],
     moduleDrag : {
-        offsets : {x:0,y:0},
-        target : 0,
-        //  Timer id stored for convenience
-        timer : 0,
-        width: 0,
+        offsets : {x:0,y:0}, // Position on element being dragged
+        target : 0, // Element of module being dragged
+        timer : 0, // Timer id stored for convenience
+        width: 0, // Original width of module
         /**
          *  @function ui.moduleDrag.mouseDown Start timer to begin drag
          *  @arg {Event} e mouseDown event
@@ -333,7 +332,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         },
         /**
          *  @function ui.moduleDrag.drag Handle dragging module
-         *  @arg {Event} e movemoce event
+         *  @arg {Event} e movemouse event
          */
         drag(e){
             let el = _ci.ui.moduleDrag.target;
@@ -355,6 +354,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             window.removeEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
             _ci.ui.moduleDrag.target.classList.remove("is-lifted");
             _ci.ui.moduleDrag.target.classList.remove("is-dragging");
+            _ci.ui.update();
         }
     },
     /**
@@ -381,8 +381,17 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             }
         for(var i in _ci.ui.columns)
             for(var j in _ci.ui.columns[i].contains)
-                if(!_i("module-"+_ci.ui.columns[i].contains[j]))
-                    _i("column-"+i).insertAdjacentHTML('beforeend', _ci.ui.buildModule(_ci.ui.columns[i].contains[j]));
+                if(!_i("module-"+_ci.ui.columns[i].contains[j])){
+                    let mel = document.createElement("div"),
+                        mid = _ci.ui.columns[i].contains[j];
+                    mel.classList.add("mFrame");
+                    _i("column-"+i).appendChild(mel);
+                    _i("mContainer").insertAdjacentHTML('beforeend', _ci.ui.buildModule(mid));
+                    if(!_ci.ui.register.hasOwnProperty(mid))
+                        _ci.ui.register[mid] = {};
+                    _ci.ui.register[mid].element = _i("module-"+mid);
+                    _ci.ui.register[mid].frame = mel;
+                }
         _ci.ui.loadSearch();
         _ci.ui.update();
     },
@@ -407,6 +416,16 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         for(var i in _ci.ui.columns)
             if(_ci.ui.columns[i].center) ctr = _i('body')._c('column')[i].getBoundingClientRect();
         _i('body').style.left = Math.max(40,((window.innerWidth / 2) - (ctr.width / 2) - (ctr.left - _i('body').getBoundingClientRect().left))) + 'px';
+        for(let i in _ci.ui.register){
+            let el = _ci.ui.register[i].element,
+                fr = _ci.ui.register[i].frame,
+                br1 = el.getBoundingClientRect();
+            fr.style.height = br1.height + "px";
+            let br2 = fr.getBoundingClientRect();
+            el.style.left = br2.x + window.scrollX + "px";
+            el.style.top = br2.y + window.scrollY + "px";
+            el.style.width = br2.width + "px";
+        }
     }
 });
 
@@ -433,3 +452,4 @@ page('/', (ctx,next)=>{
 });
 
 window.addEventListener('load',()=>page());
+window.addEventListener('resize',()=>_ci.ui.update());
