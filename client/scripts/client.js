@@ -308,6 +308,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             _ci.ui.moduleDrag.target = el;
             _ci.ui.moduleDrag.width = br.width;
             el.style.width = br.width + "px";
+            _ci.ui.moduleDrag.targetId = el.getAttribute("moduleID");
         },
         /**
          *  @function ui.moduleDrag.mouseClear Clear all mouse events
@@ -329,6 +330,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             e.style.width = _ci.ui.moduleDrag.width + "px";
             e.classList.add("is-lifted");
             e.classList.add("is-dragging");
+            _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.classList.add("is-empty");
         },
         /**
          *  @function ui.moduleDrag.drag Handle dragging module
@@ -355,6 +357,9 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             _ci.ui.moduleDrag.target.classList.remove("is-lifted");
             _ci.ui.moduleDrag.target.classList.remove("is-dragging");
             _ci.ui.update();
+            let empties = _c("is-empty");
+            for(let i of empties)
+                if(i.classList.contains("mFrame")) i.classList.remove("is-empty");
         }
     },
     /**
