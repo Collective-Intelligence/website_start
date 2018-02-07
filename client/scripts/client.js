@@ -283,6 +283,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         }
     ],
     moduleDrag : {
+        after : false,
         offsets : {x:0,y:0}, // Position on element being dragged
         target : 0, // Element of module being dragged
         timer : 0, // Timer id stored for convenience
@@ -341,9 +342,43 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             el.style.width = _ci.ui.moduleDrag.width + "px";
             for(let i in _ci.ui.columns){
                 let br = _i("column-"+i).getBoundingClientRect();
-                if(e.pageX > br.left && e.pageX < br.left + br.width)
+                if(e.pageX + scrollX> br.left && e.pageX + scrollX < br.left + br.width){
+                    //  Set module width to current target column width
                     el.style.width = _ci.ui.columns[i].width + "px";
+                    //  Determine target position in column
+                    let mf = _i("column-"+i)._c("mFrame"),
+                        af = false;
+                    //  Loop through current columns
+                    for(let j of mf){
+                        //  Ignore empty frames so it doesn't just go after itself
+                        if(j.classList.contains("is-empty")) continue;
+                        let br2 = j.getBoundingClientRect();
+                        //  Check if target position is after this frame
+                        if(e.pageY + scrollY >= br2.top + (br2.height/2))
+                            af = j;
+                        //  If it isn't after the current frame stop checking
+                        else break;
+                    }
+                    if(af !== _ci.ui.moduleDrag.after){
+                        let mel = document.createElement("div"),
+                            col = _i("column-"+i);
+                        mel.classList.add("mFrame");
+                        mel.classList.add("is-empty");
+                        mel.style.height = el.getBoundingClientRect().height + "px";
+                        //  If not after anything instert empty frame as first child
+                        if(af === false)
+                            col.insertBefore(mel,col.firstChild);
+                        //  If after a frame insert empty frame after that frame
+                        else
+                            col.insertBefore(mel,af.nextSibling);
+                        _ci.ui.moduleDrag.after = af;
+                        _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.remove();
+                        _ci.ui.register[_ci.ui.moduleDrag.targetId].frame = mel;
+                    }
+                    break;
+                }
             }
+            _ci.ui.update();
             el.style.left = e.pageX - _ci.ui.moduleDrag.offset.x + "px";
             el.style.top = e.pageY - _ci.ui.moduleDrag.offset.y + "px";
         },
@@ -356,10 +391,10 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             window.removeEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
             _ci.ui.moduleDrag.target.classList.remove("is-lifted");
             _ci.ui.moduleDrag.target.classList.remove("is-dragging");
-            _ci.ui.update();
             let empties = _c("is-empty");
             for(let i of empties)
                 if(i.classList.contains("mFrame")) i.classList.remove("is-empty");
+            _ci.ui.update();
         }
     },
     /**
@@ -425,6 +460,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             let el = _ci.ui.register[i].element,
                 fr = _ci.ui.register[i].frame,
                 br1 = el.getBoundingClientRect();
+            //  Don't reposition modules currently being moved
+            if(fr.classList.contains("is-empty")) continue;
             fr.style.height = br1.height + "px";
             let br2 = fr.getBoundingClientRect();
             el.style.left = br2.x + window.scrollX + "px";
