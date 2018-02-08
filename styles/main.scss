@@ -127,6 +127,15 @@ $shadow-24dp:
 body {
 	&.is-dragging {
 		user-select: none;
+		#mContainer {
+			.card {
+				transition: top 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
+			}
+			.card.is-dragging {
+				transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1),
+							width 0.2s cubic-bezier(.25,.8,.25,1) !important;
+			}
+		}
 	}
 }
 html {
