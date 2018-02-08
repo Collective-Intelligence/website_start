@@ -288,6 +288,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     ],
     moduleDrag : {
         after : false,
+        column : 0,
         offsets : {x:0,y:0}, // Position on element being dragged
         target : 0, // Element of module being dragged
         timer : 0, // Timer id stored for convenience
@@ -336,6 +337,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             e.style.width = _ci.ui.moduleDrag.width + "px";
             e.classList.add("is-lifted");
             e.classList.add("is-dragging");
+            _ci.ui.moduleDrag.column = _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.parentNode.id.split("-")[1];
             _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.classList.add("is-empty");
         },
         /**
@@ -350,6 +352,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                 if(e.pageX + scrollX> br.left && e.pageX + scrollX < br.left + br.width){
                     //  Set module width to current target column width
                     el.style.width = _ci.ui.columns[i].width + "px";
+                    _ci.ui.moduleDrag.column = i;
                     //  Determine target position in column
                     let mf = _i("column-"+i)._c("mFrame"),
                         af = false;
@@ -407,7 +410,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             for(let i of _ci.ui.columns)
                 i.contains.splice(i.contains.indexOf(_ci.ui.moduleDrag.targetId),1);
             //  Insert new position in columns
-            let col = _ci.ui.moduleDrag.after.parentNode.id.split("-")[1],
+            let col = _ci.ui.moduleDrag.column,
                 pos =  _ci.ui.moduleDrag.after
                     ? _ci.ui.columns[col].contains.indexOf(_ci.ui.moduleDrag.after.getAttribute("moduleid")) + 1
                     : 0,
