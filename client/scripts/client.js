@@ -313,7 +313,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             _ci.ui.moduleDrag.target = el;
             _ci.ui.moduleDrag.width = br.width;
             el.style.width = br.width + "px";
-            _ci.ui.moduleDrag.targetId = el.getAttribute("moduleID");
+            _ci.ui.moduleDrag.targetId = el.getAttribute("moduleid");
         },
         /**
          *  @function ui.moduleDrag.mouseClear Clear all mouse events
@@ -392,14 +392,28 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
          *  @arg {Event} e dragEnd event
          */
         endDrag(){
+            //  Clear event listeners
             window.removeEventListener("mousemove",_ci.ui.moduleDrag.drag);
             window.removeEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
+            //  Clear styling
             document.getElementsByTagName("body")[0].classList.remove("is-dragging");
             _ci.ui.moduleDrag.target.classList.remove("is-lifted");
             _ci.ui.moduleDrag.target.classList.remove("is-dragging");
+            //  Remove empty frames
             let empties = _c("is-empty");
             for(let i of empties)
                 if(i.classList.contains("mFrame")) i.classList.remove("is-empty");
+            //  Remove previous position in columns
+            for(let i of _ci.ui.columns)
+                i.contains.splice(i.contains.indexOf(_ci.ui.moduleDrag.targetId),1);
+            //  Insert new position in columns
+            let col = _ci.ui.moduleDrag.after.parentNode.id.split("-")[1],
+                pos =  _ci.ui.moduleDrag.after
+                    ? _ci.ui.columns[col].contains.indexOf(_ci.ui.moduleDrag.after.getAttribute("moduleid")) + 1
+                    : 0,
+                tmp = _ci.ui.columns[col].contains.splice(pos);
+             _ci.ui.columns[col].contains.push(_ci.ui.moduleDrag.targetId,...tmp);
+            //  Ping interface update
             _ci.ui.update();
         }
     },
@@ -466,6 +480,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             let el = _ci.ui.register[i].element,
                 fr = _ci.ui.register[i].frame,
                 br1 = el.getBoundingClientRect();
+            fr.setAttribute("moduleid", i);
             //  Don't reposition modules currently being moved
             if(fr.classList.contains("is-empty")) continue;
             fr.style.height = br1.height + "px";
