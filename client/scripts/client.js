@@ -367,7 +367,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                         //  If it isn't after the current frame stop checking
                         else break;
                     }
-                    if(af !== _ci.ui.moduleDrag.after){
+                    if(!af || af !== _ci.ui.moduleDrag.after){
                         let mel = document.createElement("div"),
                             col = _i("column-"+i);
                         mel.classList.add("mFrame");
