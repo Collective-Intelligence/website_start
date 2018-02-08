@@ -130,8 +130,28 @@ body {
 	}
 }
 html {
-	background:#f8f8f8 url("../img/back.png");
-	font-family:'Noto Sans',sans-serif;
+	background: #f8f8f8 url("../img/back.png");
+	background-attachment: fixed;
+	color: #111;
+	font-family: 'Noto Sans',sans-serif;
+	&.is-dark {
+		background: #303030 url("../img/back_dark.png");
+		.card,
+		.search,
+		.side__bar {
+			background: #444 !important;
+			color: #fff;
+		}
+		.nav {
+			background: #333 !important;
+		}
+		.responder {
+			background: #888 !important;
+		}
+		.search__submit {
+			color: #444 !important;
+		}
+	}
 }
 
 //	Page Layout
