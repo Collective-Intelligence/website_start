@@ -40,7 +40,7 @@ Element.prototype.responsibleParent = function(){
     }catch(e){}
     return false;
 }
-window.lastClick = {x:0,y:0};
+window.lastClick = {x:0,y:0};   // initialize mouse click position register
 window.addEventListener('click',function(e){
     window.lastClick.x = e.pageX;
     window.lastClick.y = e.pageY;
@@ -62,6 +62,7 @@ window.addEventListener('click',function(e){
     }
 });
 
+//  Inserts text in a textarea elements at the caret
 HTMLTextAreaElement.prototype.insertAtCaret = function(text){
     text = text || '';
     if(document.selection){
@@ -76,12 +77,14 @@ HTMLTextAreaElement.prototype.insertAtCaret = function(text){
         this.selectionEnd = start + text.length;
     }else this.value += text;
 };
+//  Some Handlebars shit that should really exist by default
 Handlebars.registerHelper('ifCond', function(u,s,v,o){
     return eval(u + s + v) ? o.fn(this) : o.inverse(this);
 });
 Handlebars.registerHelper('strCompare', function(u,v,o){
     return u == v ? o.fn(this) : o.inverse(this);
 });
+//  Collect all the element of several objects into a single object
 Object.collect= function(){
     var ret = {},
         len = arguments.length;
@@ -91,6 +94,7 @@ Object.collect= function(){
                 ret[p] = arguments[i][p];
     return ret;
 };
+//  Find the module that contains a certain element
 Element.prototype.parentModule = function(){
     var t = this;
     if(t == null)
@@ -367,7 +371,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                         mel.classList.add("is-empty");
                         mel.style.height = el.getBoundingClientRect().height + "px";
                         //  If not after anything instert empty frame as first child
-                        if(af === false)
+                        if(af == false)
                             col.insertBefore(mel,col.firstChild);
                         //  If after a frame insert empty frame after that frame
                         else
