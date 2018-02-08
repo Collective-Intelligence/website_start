@@ -286,13 +286,19 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             width: 300
         }
     ],
+    //  Module dragging functions and variables
     moduleDrag : {
+        active: false,
         after : false,
-        column : 0,
+        column : -1,
         offsets : {x:0,y:0}, // Position on element being dragged
         target : 0, // Element of module being dragged
         timer : 0, // Timer id stored for convenience
         width: 0, // Original width of module
+        animate(){
+            if(_ci.ui.moduleDrag.active) requestAnimationFrame(_ci.ui.moduleDrag.animate);
+            _ci.ui.update();
+        },
         /**
          *  @function ui.moduleDrag.mouseDown Start timer to begin drag
          *  @arg {Event} e mouseDown event
@@ -339,6 +345,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             e.classList.add("is-dragging");
             _ci.ui.moduleDrag.column = _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.parentNode.id.split("-")[1];
             _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.classList.add("is-empty");
+            _ci.ui.moduleDrag.active = true;
+            _ci.ui.moduleDrag.animate();
         },
         /**
          *  @function ui.moduleDrag.drag Handle dragging module
@@ -352,7 +360,6 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                 if(e.pageX + scrollX> br.left && e.pageX + scrollX < br.left + br.width){
                     //  Set module width to current target column width
                     el.style.width = _ci.ui.columns[i].width + "px";
-                    _ci.ui.moduleDrag.column = i;
                     //  Determine target position in column
                     let mf = _i("column-"+i)._c("mFrame"),
                         af = false;
@@ -367,12 +374,13 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                         //  If it isn't after the current frame stop checking
                         else break;
                     }
-                    if(!af || af !== _ci.ui.moduleDrag.after){
+                    if((!af && _ci.ui.moduleDrag.column !== i) || af !== _ci.ui.moduleDrag.after){
                         let mel = document.createElement("div"),
                             col = _i("column-"+i);
                         mel.classList.add("mFrame");
                         mel.classList.add("is-empty");
-                        mel.style.height = el.getBoundingClientRect().height + "px";
+                        mel.style.height = 0;
+                        mel.style.transition = "height 0.1s linear";
                         //  If not after anything instert empty frame as first child
                         if(af == false)
                             col.insertBefore(mel,col.firstChild);
@@ -380,7 +388,10 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                         else
                             col.insertBefore(mel,af.nextSibling);
                         _ci.ui.moduleDrag.after = af;
-                        _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.remove();
+                        _ci.ui.moduleDrag.column = i;
+                        var old = _ci.ui.register[_ci.ui.moduleDrag.targetId].frame;
+                        old.style.height = 0;
+                        setTimeout(()=>{old.remove()},200);
                         _ci.ui.register[_ci.ui.moduleDrag.targetId].frame = mel;
                     }
                     break;
@@ -416,9 +427,19 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                     : 0,
                 tmp = _ci.ui.columns[col].contains.splice(pos);
              _ci.ui.columns[col].contains.push(_ci.ui.moduleDrag.targetId,...tmp);
+            //   Clear variable
+            _ci.ui.moduleDrag.column = -1;
+            _ci.ui.moduleDrag.after = false;
+            _ci.ui.moduleDrag.active = false;
             //  Ping interface update
             _ci.ui.update();
         }
+    },
+    //  Column editing functions and variables
+    columnEdit : {
+        /**
+         *  @function ui.columnEdit.startEdit Initialize column editing
+         */
     },
     /**
      *  @function ui.buildModule Wrapper for building modules
@@ -485,8 +506,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                 br1 = el.getBoundingClientRect();
             fr.setAttribute("moduleid", i);
             //  Don't reposition modules currently being moved
-            if(fr.classList.contains("is-empty")) continue;
             fr.style.height = br1.height + "px";
+            if(fr.classList.contains("is-empty")) continue;
             let br2 = fr.getBoundingClientRect();
             el.style.left = br2.x + window.scrollX + "px";
             el.style.top = br2.y + window.scrollY + "px";
