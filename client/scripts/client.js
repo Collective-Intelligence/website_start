@@ -254,6 +254,7 @@ _ci.u       = (_ci.users = {        //  Account information and interaction
 });
 _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     register : {},
+    editing : false,
     /*
      *  Default column arrangement, overridden by user settings
      *      `center` if the column should be centered in the screen, only one
@@ -295,51 +296,39 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         timer : 0, // Timer id stored for convenience
         width: 0, // Original width of module
         /**
-         *  @function ui.moduleDrag.mouseDown Start timer to begin drag
+         *  @function ui.moduleDrag.mouseDown Start dragging if editing is true
          *  @arg {Event} e mouseDown event
          */
         mouseDown(e){
-            _ci.ui.moduleDrag.timer = window.setTimeout(_ci.ui.moduleDrag.startDrag,1e3);
-            window.addEventListener("mouseup",_ci.ui.moduleDrag.mouseClear);
-            window.setTimeout(()=>{
-                window.addEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
-            },20);
+            if(!_ci.ui.editing) return;
+            //  Add event listeners
+            window.addEventListener("mousemove",_ci.ui.moduleDrag.drag);
+            window.addEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
+            document.getElementsByTagName("body")[0].classList.add("is-dragging");
+            //  Set up module element for dragging
             let el = e.target.parentModule(),
                 br = el.getBoundingClientRect();
             el.style.left = br.left + "px";
             el.style.top = br.top + "px";
+            el.style.width = br.width + "px";
+            el.classList.add("is-lifted");
+            el.classList.add("is-dragging");
+            //  Set variables for dragging
+            let moduleid = el.getAttribute("moduleid");
             _ci.ui.moduleDrag.offset = {
                 x: e.pageX-br.left,
                 y: e.pageY-br.top
             };
             _ci.ui.moduleDrag.target = el;
             _ci.ui.moduleDrag.width = br.width;
-            el.style.width = br.width + "px";
-            _ci.ui.moduleDrag.targetId = el.getAttribute("moduleid");
-        },
-        /**
-         *  @function ui.moduleDrag.mouseClear Clear all mouse events
-         */
-        mouseClear(){
-            window.clearTimeout(_ci.ui.moduleDrag.timer);
-            window.removeEventListener("mouseup",_ci.ui.moduleDrag.mouseClear);
-            window.removeEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
+            _ci.ui.moduleDrag.targetId = moduleid;
+            _ci.ui.moduleDrag.column = _ci.ui.register[moduleid].frame.parentNode.id.split("-")[1];
+            _ci.ui.register[moduleid].frame.classList.add("is-empty");
         },
         /**
          *  @function ui.moduleDrag.startDrag Handler for dragging modules
          */
         startDrag(){
-            window.removeEventListener("mouseup",_ci.ui.moduleDrag.mouseClear);
-            window.removeEventListener("mousemove",_ci.ui.moduleDrag.mouseClear);
-            window.addEventListener("mousemove",_ci.ui.moduleDrag.drag);
-            window.addEventListener("mouseup",_ci.ui.moduleDrag.endDrag);
-            document.getElementsByTagName("body")[0].classList.add("is-dragging");
-            let e = _ci.ui.moduleDrag.target;
-            e.style.width = _ci.ui.moduleDrag.width + "px";
-            e.classList.add("is-lifted");
-            e.classList.add("is-dragging");
-            _ci.ui.moduleDrag.column = _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.parentNode.id.split("-")[1];
-            _ci.ui.register[_ci.ui.moduleDrag.targetId].frame.classList.add("is-empty");
         },
         /**
          *  @function ui.moduleDrag.drag Handle dragging module
@@ -468,6 +457,20 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
      */
     buildModule(name){
         return _ci.m[name].template(Object.collect(_ci.m[name],{id:name}));
+    },
+    /**
+     *  @function ui.edit Wrapper function for initializing column and module editing
+     */
+    edit(){
+        _ci.ui.editing = true;
+        _ci.ui.columnEdit.startEdit();
+    },
+    /**
+     *  @function ui.endEdit Clear editing
+     */
+    endEdit(){
+        _ci.ui.editing = false;
+        _ci.ui.columnEdit.endEdit();
     },
     /**
      *  @function ui.load Load the basic UI structure
