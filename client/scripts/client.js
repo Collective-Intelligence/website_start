@@ -464,6 +464,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     edit(){
         _ci.ui.editing = true;
         _ci.ui.columnEdit.startEdit();
+        _i("nav__edit").setAttribute("onclick","_ci.ui.endEdit()");
     },
     /**
      *  @function ui.endEdit Clear editing
@@ -471,6 +472,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     endEdit(){
         _ci.ui.editing = false;
         _ci.ui.columnEdit.endEdit();
+        _i("nav__edit").setAttribute("onclick","_ci.ui.edit()");
     },
     /**
      *  @function ui.load Load the basic UI structure
