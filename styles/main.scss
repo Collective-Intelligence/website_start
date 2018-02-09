@@ -118,13 +118,19 @@ $shadow-24dp:
 	0 24px 38px 3px rgba(0,0,0,.14),
 	0 9px 46px 8px rgba(0,0,0,.12);
 
+//	Mixins
+@mixin font-size($size: 1.6){
+	font-size:($size * 10) + px;
+	font-size:$size + rem;
+}
+
 //	Generics
 * {
-	margin:0px;
+	margin:0;
 	zoom:1;
-	font-size:10pt;
 }
 body {
+	@include font-size(1.2);
 	&.is-dragging {
 		user-select: none;
 		#mContainer {
@@ -139,6 +145,7 @@ html {
 	background-attachment: fixed;
 	color: #111;
 	font-family: 'Noto Sans',sans-serif;
+	font-size: 10px;
 	&.is-dark {
 		background: #303030 url("../img/back_dark.png");
 		.card,
@@ -161,7 +168,7 @@ html {
 
 //	Page Layout
 #body {
-	padding-top:6rem;
+	padding-top:8rem;
 	position:absolute;
 }
 .column {
@@ -251,8 +258,8 @@ html {
 }
 
 //	Implementations
-.cedit {
-	height: 100vh;
+#cedit {
+	height: 100%;
 	left: 0;
 	position: fixed;
 	top: 0;
@@ -266,7 +273,7 @@ html {
 }
 .nav {
 	background: #f8f8f8;
-	height: 4rem;
+	height: 5rem;
 	left: 0;
 	position: fixed;
 	top: 0;
@@ -274,18 +281,18 @@ html {
 }
 .search {
 	background: #fff;
-	height: 2.5rem;
+	height: 3rem;
 	left: 30vw;
-	margin-top: 0.5rem;
+	margin-top: 1rem;
 	min-width: 500px;
 	position: relative;
 	width: 40vw;
 	.search__input {
 		background: transparent;
 		border: 0;
-		height: 2.5rem;
+		height: 3rem;
 		left: 0;
-		line-height: 2.5rem;
+		line-height: 3rem;
 		outline: 0;
 		padding: 0 1rem;
 		position: absolute;
@@ -296,9 +303,9 @@ html {
 		border: 0;
 		color: #fff !important;
 		cursor: pointer;
-		font-size: 1.5rem !important;
-		height: 2.5rem;
-		line-height: 2.5rem;
+		font-size: 2rem !important;
+		height: 3rem;
+		line-height: 3rem;
 		outline: 0;
 		position: absolute;
 		right: 0;
@@ -324,7 +331,9 @@ html {
 	position: absolute;
 }
 #nav__edit {
-	line-height: 2rem;
+	cursor: pointer;
+	font-size: 2rem;
+	line-height: 3rem;
 	position: absolute;
 	right: 1rem;
 	top: 1rem;

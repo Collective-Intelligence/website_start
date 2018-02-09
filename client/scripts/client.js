@@ -436,7 +436,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             for(let i in _ci.ui.columns){
                 let cel = document.getElementById("cedit__ghost-" + i),
                     br = _i("column-" + i).getBoundingClientRect(),
-                    space = 10;
+                    space = 8;
                 cel.style.left = br.left - space + "px";
                 cel.style.width = br.width + (space*  2) + "px";
                 cel.style.top = br.top - space + "px";
