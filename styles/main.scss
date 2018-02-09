@@ -251,6 +251,13 @@ html {
 }
 
 //	Implementations
+.cedit {
+	height: 100vh;
+	left: 0;
+	position: fixed;
+	top: 0;
+	z-index: 0;
+}
 .module {
 	position: absolute;
 	.module__content {
@@ -311,6 +318,11 @@ html {
 }
 
 //	Elements
+.cedit__ghost {
+	background: rgba(0,0,0,0.1);
+	height: 100%;
+	position: absolute;
+}
 .side__bar {
 	background:#fff;
 	border:0 !important;

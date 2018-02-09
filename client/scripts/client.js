@@ -429,6 +429,37 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         /**
          *  @function ui.columnEdit.startEdit Initialize column editing
          */
+        startEdit(){
+            if(!_i('cedit')) document.body.insertAdjacentHTML('beforeend', '<div id="cedit"></div>');
+            for(let i in _ci.ui.columns){
+                let cel = document.createElement("div");
+                cel.classList.add("cedit__ghost");
+                cel.id = "cedit__ghost-" + i;
+                _i('cedit').appendChild(cel);
+            }
+            _ci.ui.columnEdit.update();
+            window.addEventListener("resize",_ci.ui.columnEdit.update);
+        },
+        /**
+         *  @function ui.columnEdit.update Update interface as needed
+         */
+        update(){
+            for(let i in _ci.ui.columns){
+                let cel = document.getElementById("cedit__ghost-" + i),
+                    br = _i("column-" + i).getBoundingClientRect(),
+                    space = 10;
+                cel.style.left = br.left - space + "px";
+                cel.style.width = br.width + (space*  2) + "px";
+                cel.style.top = br.top - space + "px";
+            }
+        },
+        /**
+         *  @function ui.columnEdit.endEdit Clear out edit interface
+         */
+        endEdit(){
+            _i("cedit").innerHTML = "";
+            window.removeEventListener("resize",_ci.ui.columnEdit.update);
+        }
     },
     /**
      *  @function ui.buildModule Wrapper for building modules
