@@ -458,7 +458,6 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
          *  @function ui.columnEdit.mouseMove Handle dragging column width
          */
         mouseMove(e){
-            console.log("FUCL");
             var newWidth = _ci.ui.columnEdit.startWidth + (e.pageX - _ci.ui.columnEdit.startPos);
             newWidth = Math.max(newWidth, _ci.ui.columnEdit.minWidth);
             _ci.ui.columnEdit.target.style.width = newWidth + "px";

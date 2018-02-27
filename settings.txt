@@ -1,0 +1,54 @@
+General Settings
+
+    00000000000000000...000000...
+    1---2---3---45---6--7-----8--
+
+    1: Accent Red (0-F)
+    2: Accent Blue (0-F)
+    3: Accent Green (0-F)
+    4: Dark Mode?
+    5: Number of columns (0-16)
+    6: Column Settings
+    7: Number of modules (0-64)
+    8: Module Settings
+
+Individual Column Settings
+
+    00000000
+    1------2
+
+    1: Width (200 + (n*10)) Min 200, Max 1480
+    2: Center?
+
+Individual Module Settings
+
+    0000
+    1---
+
+    1: Containing column
+
+
+Example, the default:
+
+    11111011000000011000101000011110100010100000110000000000000000100100010
+    1-----------23---4------56------78------9A-----B---C---D---E---F---G---
+
+    In hexadecimal this can be represented as:
+        7D80C50F4506000122
+
+    1: accent color #FB0, approximation of material design color amber
+    2: dark mode disabled
+    3: 3 columns
+    4: column 0 300px wide (200 + 10*10)
+    5: column 0 not centered
+    6: column 1 500px wide (200 + 30*10)
+    7: column 1 centered
+    8: column 2 300px wide (200 + 10*10)
+    9: column 2 not centered
+    A: 6 modules
+    B: module 0 in column 0
+    C: module 1 in column 0
+    D: module 2 in column 0
+    E: module 3 in column 1
+    F: module 4 in column 2
+    G: module 5 in column 2
