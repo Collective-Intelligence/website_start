@@ -461,8 +461,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             var newWidth = _ci.ui.columnEdit.startWidth + (e.pageX - _ci.ui.columnEdit.startPos);
             _ci.ui.columnEdit.target.style.width = newWidth + "px";
             _ci.ui.columns[_ci.ui.columnEdit.column].width = newWidth;
-            _ci.ui.columnEdit.update();
             _ci.ui.update();
+            _ci.ui.columnEdit.update();
         },
         /**
          *  @function ui.columnEdit.mouseUp Let go of column dragging
