@@ -416,6 +416,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     //  Column editing functions and variables
     columnEdit : {
         column : -1, // id of current column
+        minWidth : 200, // minimum width a column can be (should be updated based on contents)
         space : 8, // space around each column to pad ghost
         startPos : 0, // starting x position
         startWidth : 0, // starting width
@@ -459,6 +460,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         mouseMove(e){
             console.log("FUCL");
             var newWidth = _ci.ui.columnEdit.startWidth + (e.pageX - _ci.ui.columnEdit.startPos);
+            newWidth = Math.max(newWidth, _ci.ui.columnEdit.minWidth);
             _ci.ui.columnEdit.target.style.width = newWidth + "px";
             _ci.ui.columns[_ci.ui.columnEdit.column].width = newWidth;
             _ci.ui.update();
