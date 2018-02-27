@@ -22,20 +22,23 @@ Individual Column Settings
 
 Individual Module Settings
 
-    0000
-    1---
+    00000000
+    1---2---
 
     1: Containing column
+    2: Index in column
 
 
 Example, the default:
 
-    11111011000000011000101000011110100010100000110000000000000000100100010
-    1-----------23---4------56------78------9A-----B---C---D---E---F---G---
+    7..D...8...0...C...5...0...F...4...5...0...6...0...0...0...1...0...2...2...0...2...0...2...1... HEX
+    11111011000000011000101000011110100010100000110000000000000000100000010000100000010000000100001 BIN
+    1-----------23---4------56------78------9A-----B---C---D---E---F---G---H---I---J---K---L---M--- REF
 
     In hexadecimal this can be represented as:
-        7D80C50F4506000122
+        7D80C50F4506000102102021
 
+    REFERENCE
     1: accent color #FB0, approximation of material design color amber
     2: dark mode disabled
     3: 3 columns
@@ -47,8 +50,48 @@ Example, the default:
     9: column 2 not centered
     A: 6 modules
     B: module 0 in column 0
-    C: module 1 in column 0
-    D: module 2 in column 0
-    E: module 3 in column 1
-    F: module 4 in column 2
-    G: module 5 in column 2
+    C: module 0 is index 0
+    D: module 1 in column 0
+    E: module 1 is index 1
+    F: module 2 in column 0
+    G: module 2 is index 2
+    H: module 3 in column 1
+    I: module 3 is index 0
+    J: module 4 in column 2
+    K: module 4 is index 0
+    L: module 5 in column 2
+    M: module 5 is index 1
+
+
+For reference, in the JSON format system this would look like:
+
+{
+    "accent" : "#FFC107",
+    "dark" : false,
+    "columns" : [
+        {
+            "width" : 300,
+            "center" : false,
+            "contains" : [
+                "test1",
+                "test2",
+                "test3"
+            ]
+        },
+        {
+            "width" : 500,
+            "center" : true,
+            "contains" : [
+                "test4"
+            ]
+        },
+        {
+            "width" : 300,
+            "center" : false,
+            "contains" : [
+                "test5",
+                "test6"
+            ]
+        }
+    ]
+}
