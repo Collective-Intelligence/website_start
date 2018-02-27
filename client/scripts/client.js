@@ -415,6 +415,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     },
     //  Column editing functions and variables
     columnEdit : {
+        space : 8, // space around each column to pad ghost
         /**
          *  @function ui.columnEdit.startEdit Initialize column editing
          */
@@ -425,21 +426,32 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                 cel.classList.add("cedit__ghost");
                 cel.id = "cedit__ghost-" + i;
                 _i('cedit').appendChild(cel);
+                let hnd = document.createElement("div");
+                hnd.classList.add("cedit__handle");
+                hnd.id = "cedit__handle-" + i;
+                hnd.style.width = 20 - (_ci.ui.columnEdit.space * 2) + "px";
+                _i('cedit').appendChild(hnd);
             }
             _ci.ui.columnEdit.update();
             window.addEventListener("resize",_ci.ui.columnEdit.update);
         },
+        /**
+         *  @function ui.columnEdit.mouseDown Handle mouse down on handles
+         */
         /**
          *  @function ui.columnEdit.update Update interface as needed
          */
         update(){
             for(let i in _ci.ui.columns){
                 let cel = document.getElementById("cedit__ghost-" + i),
+                    hnd = document.getElementById('cedit__handle-' + i),
                     br = _i("column-" + i).getBoundingClientRect(),
-                    space = 8;
+                    space = _ci.ui.columnEdit.space;
                 cel.style.left = br.left - space + "px";
-                cel.style.width = br.width + (space*  2) + "px";
+                cel.style.width = br.width + (space * 2) + "px";
+                hnd.style.top =
                 cel.style.top = br.top - space + "px";
+                hnd.style.left = br.left + br.width + space + "px";
             }
         },
         /**

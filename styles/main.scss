@@ -330,6 +330,11 @@ html {
 	height: 100%;
 	position: absolute;
 }
+.cedit__handle {
+	cursor: col-resize;
+	height: 100%;
+	position: absolute;
+}
 #nav__edit {
 	cursor: pointer;
 	font-size: 2rem;
