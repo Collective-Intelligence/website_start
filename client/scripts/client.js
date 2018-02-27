@@ -415,7 +415,11 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     },
     //  Column editing functions and variables
     columnEdit : {
+        column : -1, // id of current column
         space : 8, // space around each column to pad ghost
+        startPos : 0, // starting x position
+        startWidth : 0, // starting width
+        target : 0, // column target
         /**
          *  @function ui.columnEdit.startEdit Initialize column editing
          */
@@ -429,7 +433,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                 let hnd = document.createElement("div");
                 hnd.classList.add("cedit__handle");
                 hnd.id = "cedit__handle-" + i;
-                hnd.style.width = 20 - (_ci.ui.columnEdit.space * 2) + "px";
+                hnd.style.width = 20 - (_ci.ui.columnEdit.space) + "px";
+                hnd.addEventListener('mousedown',_ci.ui.columnEdit.mouseDown);
                 _i('cedit').appendChild(hnd);
             }
             _ci.ui.columnEdit.update();
@@ -438,6 +443,37 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         /**
          *  @function ui.columnEdit.mouseDown Handle mouse down on handles
          */
+        mouseDown(e){
+            console.log(e.target);
+            _ci.ui.columnEdit.column = e.target.id.split('-')[1];
+            _ci.ui.columnEdit.target = _i('column-' + _ci.ui.columnEdit.column);
+            _ci.ui.columnEdit.startPos = e.pageX;
+            _ci.ui.columnEdit.startWidth = _ci.ui.columnEdit.target.getBoundingClientRect().width;
+            window.addEventListener('mousemove', _ci.ui.columnEdit.mouseMove);
+            window.addEventListener('mouseup', _ci.ui.columnEdit.mouseUp);
+            document.getElementsByTagName("body")[0].classList.add("is-dragging");
+        },
+        /**
+         *  @function ui.columnEdit.mouseMove Handle dragging column width
+         */
+        mouseMove(e){
+            console.log("FUCL");
+            var newWidth = _ci.ui.columnEdit.startWidth + (e.pageX - _ci.ui.columnEdit.startPos);
+            _ci.ui.columnEdit.target.style.width = newWidth + "px";
+            _ci.ui.columns[_ci.ui.columnEdit.column].width = newWidth;
+            _ci.ui.columnEdit.update();
+            _ci.ui.update();
+        },
+        /**
+         *  @function ui.columnEdit.mouseUp Let go of column dragging
+         */
+        mouseUp(){
+            window.removeEventListener('mousemove', _ci.ui.columnEdit.mouseMove);
+            window.removeEventListener('mouseup', _ci.ui.columnEdit.mouseUp);
+            document.getElementsByTagName("body")[0].classList.remove("is-dragging");
+            _ci.ui.columnEdit.update();
+            _ci.ui.update();
+        },
         /**
          *  @function ui.columnEdit.update Update interface as needed
          */
@@ -449,9 +485,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
                     space = _ci.ui.columnEdit.space;
                 cel.style.left = br.left - space + "px";
                 cel.style.width = br.width + (space * 2) + "px";
-                hnd.style.top =
-                cel.style.top = br.top - space + "px";
-                hnd.style.left = br.left + br.width + space + "px";
+                hnd.style.top = cel.style.top = br.top - space + "px";
+                hnd.style.left = br.left + br.width + (space / 2) + "px";
             }
         },
         /**
@@ -533,9 +568,13 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
      *  @function ui.update Updates the UI based on current conditions
      */
     update(){
-        var ctr,left;
-        for(var i in _ci.ui.columns)
+        var ctr,
+            left = 0;
+        for(var i in _ci.ui.columns){
+            _i('column-' + i).style.left = `calc(${left}px + ${i*2}rem)`;
+            left += _ci.ui.columns[i].width;
             if(_ci.ui.columns[i].center) ctr = _i('body')._c('column')[i].getBoundingClientRect();
+        }
         _i('body').style.left = Math.max(40,((window.innerWidth / 2) - (ctr.width / 2) - (ctr.left - _i('body').getBoundingClientRect().left))) + 'px';
         for(let i in _ci.ui.register){
             let el = _ci.ui.register[i].element,
