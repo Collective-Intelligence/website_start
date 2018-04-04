@@ -32,11 +32,15 @@ Individual Module Settings
 Example, the default:
 
     7..D...8...0...C...5...0...F...4...5...0...6...0...0...0...1...0...2...2...0...2...0...2...1... HEX
+    +.....w.....G.....K.....H.....o.....o.....M.....A.....A.....I.....E.....I.....E.....B.....C.... B64
     11111011000000011000101000011110100010100000110000000000000000100000010000100000010000000100001 BIN
     1-----------23---4------56------78------9A-----B---C---D---E---F---G---H---I---J---K---L---M--- REF
 
     In hexadecimal this can be represented as:
         7D80C50F4506000102102021
+
+    Or in Base64 (padded with zeros to be 6*n bits long):
+        +wGKHooMAAIEIEBC
 
     REFERENCE
     1: accent color #FB0, approximation of material design color amber
