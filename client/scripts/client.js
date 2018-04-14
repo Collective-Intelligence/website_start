@@ -185,6 +185,7 @@ _ci.m       = (_ci.modules = {      //  Module information
     }
 });
 _ci.t       = (_ci.theme = {        //  Maniplate the page theme
+    darkMode      : false,          //  If dark mode is set
     isMenuOpen    : false,          //  If sidebar menu is open
     menu(){                         //  Toggle sidebar menu open/close
         _c("side")[0].style.left = !(this.isMenuOpen = !this.isMenuOpen)
@@ -193,6 +194,14 @@ _ci.t       = (_ci.theme = {        //  Maniplate the page theme
         _c("side")[0].style.transitionTimingFunction = !this.isMenuOpen
             ? "cubic-bezier(0.7, 0.0, 1.0, 1.0)"
             : "cubic-bezier(0.5, 0.0, 0.0, 1.5)";
+    },
+    /**
+     *  @function t.setDarkMode Set UI theme (light, dark)
+     *  @arg {Boolean} darkMode Whether or not to set as Dark Mode
+     */
+    setDarkMode(darkMode){
+        _ci.t.darkMode = darkMode;
+        _ci.ui.update();
     },
     side(ctx,next){
         _ci.u.getSession(function(sess){
@@ -570,7 +579,8 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
      */
     update(){
         var ctr,
-            left = 0;
+            left = 0,
+            doc = document.getElementsByTagName('html')[0];
         for(var i in _ci.ui.columns){
             _i('column-' + i).style.left = `calc(${left}px + ${i*2}rem)`;
             left += _ci.ui.columns[i].width;
@@ -589,6 +599,13 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
             el.style.left = br2.x + window.scrollX + "px";
             el.style.top = br2.y + window.scrollY + "px";
             el.style.width = br2.width + "px";
+        }
+        if(_ci.t.darkMode){
+            if(!doc.classList.contains("dark"))
+                doc.classList.add("dark");
+        }else{
+            if(doc.classList.contains("dark"))
+                doc.classList.remove("dark");
         }
     }
 });

@@ -362,3 +362,30 @@ html {
 	top:210px;
 	width:calc(100% - 40px);
 }
+
+//	Dark Mode
+html.dark {
+	background: #333 url("../img/back_dark.png");
+	color: #fff;
+
+	//	Models
+	.responder {
+		background: #333;
+	}
+	.card {
+		background: #444;
+	}
+
+	//	Implementations
+	.nav {
+		background: #383838;
+	}
+	.search {
+		background: #444;
+	}
+
+	//	Elements
+	.side__bar {
+		background: #444;
+	}
+}
