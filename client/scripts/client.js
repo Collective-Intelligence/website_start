@@ -249,6 +249,12 @@ _ci.t       = (_ci.theme = {        //  Maniplate the page theme
             _c('side__content')[0].innerHTML = _ci.tp.sidebar(o);
             next();
         });
+    },
+    /**
+     *  @function t.toggleDarkMode Toggle dark mode
+     */
+    toggleDarkMode(){
+        _ci.t.setDarkMode(!_ci.t.darkMode);
     }
 });
 _ci.u       = (_ci.users = {        //  Account information and interaction

@@ -25,7 +25,8 @@ html(xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en")
                 form(action="javascript:page('/search/' + encodeURIComponent(_c('search__input')[0].value))")
                     input.search__input(type="text" placeholder="Search")
                     input.search__submit.material-icons(type="submit" value="search")
-            div#nav__edit.material-icons(onclick="_ci.ui.edit()") build
+            div#nav__dark.nav__option.material-icons(onclick="_ci.t.toggleDarkMode()") brightness_2
+            div#nav__edit.nav__option.material-icons(onclick="_ci.ui.edit()") build
         div.side
             div.drawer.side__bar
                 div.side__content

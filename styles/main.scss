@@ -337,13 +337,18 @@ html {
 	position: absolute;
 	z-index: 100;
 }
-#nav__edit {
+.nav__option {
 	cursor: pointer;
 	font-size: 2rem;
 	line-height: 3rem;
 	position: absolute;
-	right: 1rem;
 	top: 1rem;
+}
+#nav__dark {
+	right: 4rem;
+}
+#nav__edit {
+	right: 1rem;
 }
 .side__bar {
 	background:#fff;
