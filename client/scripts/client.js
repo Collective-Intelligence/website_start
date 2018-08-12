@@ -641,27 +641,68 @@ page('/', (ctx,next)=>{
 window.addEventListener('load',()=>page());
 window.addEventListener('resize',()=>_ci.ui.update());
 
+/**
+ *  @function getAccount
+ *  @arg {string} accountName Name of the account for which to retrieve information.
+ *  @arg {number} amount Number of recent transactions to parse.
+ *  @arg {function} callback Callback function to handle errors and returns.
+ *  @return {boolean} Success of information parsing.
+ */
 const
     MEMO_TO = "co-in-memo",
     MEMO_FROM = "co-in";
-function getAccount(accountName,amount,callback){
-    steem.api.getAccountHistory(MEMO_TO,-1,amount,(e,r)=>{
+function getAccount(accountName, amount, callback){
+    //  Check if callback is a function
+    if(typeof callback !== "function"){
+        throw new TypeError(`callback must be a function`);
+        return false;
+    }
+    //  Check if accountName is a string
+    if(typeof accountName !== "string"){
+        let e = `accountName must be a string`;
+        callback(e, null);
+        throw new TypeError(e);
+        return false;
+    }
+    //  Check if amount is a number
+    if(typeof amount !== "number"){
+        let e = `amount must be a number`
+        callback(e, null);
+        throw new TypeError(e);
+        return false;
+    }
+    //  Make call to steem.js
+    steem.api.getAccountHistory(MEMO_TO, -1, amount, (e,r)=>{
+        //  On error callback with error
         if(e!==null) callback(e,null);
         else {
+            //  Filter results down to MEMO_FROM to MEMO_TO transfers
             let t = r.filter(tx=>
                 tx[1].op[0]=='transfer'&&
                 tx[1].op[1].from==MEMO_FROM
-            ),  ret = null;
-            for(let i = t.length-1; i > 0; i--){
-                let m = JSON.parse(t[i][1].op[1].memo);
-                if(m.account==accountName){
-                    ret = m;
+            );
+            //  Iterate from most recent transfer back
+            for(let m, i = t.length-1; i > 0; i--){
+                //  Parse memo JSON, with error handling
+                try {
+                    m = JSON.parse(t[i][1].op[1].memo);
+                } catch(e){
+                    callback(e,null);
+                    return false;
+                }
+                //  Check is memo is for desired account
+                if(m.account == accountName){
+                    callback(null,m);
+                    return true;
                     break;
                 }
             }
-            callback(null,ret);
+            //  Callback error if no results are found
+            callback(`No information for account "${accountName}" found.`,null);
+            return false;
         }
     });
+    return false;
 }
 
 getAccount('anarchyhasnogods',50,(e,r)=>console.log(r));
