@@ -640,3 +640,28 @@ page('/', (ctx,next)=>{
 
 window.addEventListener('load',()=>page());
 window.addEventListener('resize',()=>_ci.ui.update());
+
+const
+    MEMO_TO = "co-in-memo",
+    MEMO_FROM = "co-in";
+function getAccount(accountName,amount,callback){
+    steem.api.getAccountHistory(MEMO_TO,-1,amount,(e,r)=>{
+        if(e!==null) callback(e,null);
+        else {
+            let t = r.filter(tx=>
+                tx[1].op[0]=='transfer'&&
+                tx[1].op[1].from==MEMO_FROM
+            ),  ret = null;
+            for(let i = t.length-1; i > 0; i--){
+                let m = JSON.parse(t[i][1].op[1].memo);
+                if(m.account==accountName){
+                    ret = m;
+                    break;
+                }
+            }
+            callback(null,ret);
+        }
+    });
+}
+
+getAccount('anarchyhasnogods',50,(e,r)=>console.log(r));
