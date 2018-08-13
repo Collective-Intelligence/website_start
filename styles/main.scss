@@ -402,6 +402,30 @@ html {
 		padding-bottom: 0.5rem;
 		width: 100%;
 	}
+	table {
+		border-spacing: 0;
+		margin-top: 3rem;
+		width: 100%;
+	}
+	td {
+		padding: 0;
+	}
+	table td:nth-child(1) {
+		display: none;
+		width: 5rem;
+	}
+	table td:nth-child(2) {
+		@include font-size(1.5);
+		line-height: 2rem;
+		input {
+			@include font-size(1.5);
+			height: 2rem;
+			width: calc(100% - 7rem);
+		}
+	}
+	table td:nth-child(3) {
+		width: 5rem;
+	}
 	.shop__token {
 		float: left;
 		height: 100px;
@@ -421,6 +445,20 @@ html {
 			user-select: none;
 			width: 8rem;
 		}
+	}
+	.shop__form-account-icon {
+		@include font-size(4);
+		line-height: 4rem;
+		vertical-align: middle;
+	}
+	.shop__form-submit {
+		@include font-size(1.5);
+		background: white;
+		border: 0.2rem solid #111;
+		border-radius: 0.2rem;
+		font-weight: bold;
+		line-height: 2.5rem;
+		width: 5rem;
 	}
 }
 
