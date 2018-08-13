@@ -268,7 +268,7 @@ html {
 .module {
 	position: absolute;
 	.module__content {
-		padding: 1rem;
+		padding: 2rem;
 	}
 }
 .nav {
@@ -367,6 +367,62 @@ html {
 	top:210px;
 	width:calc(100% - 40px);
 }
+.shop__form {
+	input {
+		border: none;
+		outline: none;
+	}
+	input[type="number"] {
+		@include font-size(10);
+		border: none;
+		border-bottom: 0.5rem solid #111;
+		float: right;
+		height: 9.5rem;
+		line-height: 9.5rem;
+		outline: none;
+		padding: 0;
+		position: relative;
+		text-align: right;
+		width: calc(100% - 11rem);
+		//	TODO Add custom style for these
+		&::-webkit-inner-spin-button {
+		    appearance: none;
+		    margin: 0;
+		}
+	}
+	select {
+		@include font-size(2);
+		appearance: none;
+		border: none;
+		border-bottom: 0.5rem solid #111;
+		color: #111;
+		font-weight: bold;
+		margin-bottom: 1rem;
+		outline: none;
+		padding-bottom: 0.5rem;
+		width: 100%;
+	}
+	.shop__token {
+		float: left;
+		height: 100px;
+		height: 10rem;
+		margin-right: 1rem;
+		position: relative;
+		width: 10rem;
+		.shop__token-icon {
+			background: #111;
+			border-radius: 50%;
+			color: white;
+			font-size: 6rem;
+			line-height: 8rem;
+			padding: 1rem;
+			position: absolute;
+			text-align: center;
+			user-select: none;
+			width: 8rem;
+		}
+	}
+}
 
 //	Dark Mode
 html.dark {
@@ -392,5 +448,17 @@ html.dark {
 	//	Elements
 	.side__bar {
 		background: #444;
+	}
+	.shop__form {
+		input,
+		select {
+			background: #444;
+			border-color: white;
+			color: white;
+		}
+		.shop__token-icon {
+			background: white;
+			color: #444;
+		}
 	}
 }

@@ -149,13 +149,8 @@ _ci         = (CollectiveIntelligence = new(function(){
     },1e3);
 })());
 _ci.tp      = (_ci.templates = {    //  Handlebars templates
-    //account     : _h('account'),
-    //curation    : _h('curation'),
-    //delegation  : _h('delegation'),
-    //dropdown    : _h('dropdown'),
-    //dropdown2   : _h('dropdown2'),
+    shop        : _h('shop'),
     sidebar     : _h('sidebar'),
-    //tokens      : _h('tokens'),
     test        : _h('test')
 });
 _ci.m       = (_ci.modules = {      //  Module information
@@ -182,6 +177,33 @@ _ci.m       = (_ci.modules = {      //  Module information
     test6   : {
         name: "Test Module 6",
         template: _ci.tp.test
+    },
+    shop    : {
+        name: "Shop",
+        template: _ci.tp.shop
+    }
+});
+_ci.s       = (_ci.store = {        // Store UI and purchase handling
+    ui          : {
+        select(e){
+            let s;
+            switch(e.value){
+                case "token-upvote-perm":
+                    s = "thumb_up";
+                    break;
+                case "adp_tok":
+                    s = "add_comment";
+                    break;
+                case "ad-token-perm":
+                    // s = "trending_up";
+                    s = "visibility";
+                    break;
+                default:
+                    s = "thumb_up";
+            }
+            e.parentElement.getElementsByClassName("shop__token-icon")[0]
+                .innerText = s;
+        }
     }
 });
 _ci.t       = (_ci.theme = {        //  Maniplate the page theme
@@ -290,7 +312,7 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
         {
             center: true,
             contains: [
-                "test4"
+                "shop"
             ],
             width: 500
         },

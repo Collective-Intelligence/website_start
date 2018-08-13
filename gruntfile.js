@@ -45,7 +45,7 @@ module.exports = function(grunt){
 				tasks : ['sass','autoprefixer']
 			},
             pug : {
-                files : ['client/*.pug'],
+                files : ['client/*.pug','templates/*.hbs'],
                 tasks : ['pug']
             }
 		}
