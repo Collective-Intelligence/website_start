@@ -151,7 +151,8 @@ _ci         = (CollectiveIntelligence = new(function(){
 _ci.tp      = (_ci.templates = {    //  Handlebars templates
     shop        : _h('shop'),
     sidebar     : _h('sidebar'),
-    test        : _h('test')
+    test        : _h('test'),
+    tokens      : _h('tokens')
 });
 _ci.m       = (_ci.modules = {      //  Module information
     test1   : {
@@ -181,6 +182,10 @@ _ci.m       = (_ci.modules = {      //  Module information
     shop    : {
         name: "Shop",
         template: _ci.tp.shop
+    },
+    tokens  : {
+        name: "Tokens",
+        template: _ci.tp.tokens
     }
 });
 _ci.s       = (_ci.store = {        // Store UI and purchase handling
@@ -303,16 +308,15 @@ _ci.ui      = (_ci.interface = {    //  User interface rendering and events
     columns : [
         {
             contains: [
-                "test1",
-                "test2",
-                "test3"
+                "shop",
+                "tokens"
             ],
-            width: 300
+            width: 320
         },
         {
             center: true,
             contains: [
-                "shop"
+                "test4"
             ],
             width: 500
         },
@@ -663,6 +667,10 @@ page('/', (ctx,next)=>{
 window.addEventListener('load',()=>page());
 window.addEventListener('resize',()=>_ci.ui.update());
 
+const
+   MEMO_TO = "co-in-memo",
+   MEMO_FROM = "co-in";
+
 /**
  *  @function getAccount
  *  @arg {string} accountName Name of the account for which to retrieve information.
@@ -670,9 +678,7 @@ window.addEventListener('resize',()=>_ci.ui.update());
  *  @arg {function} callback Callback function to handle errors and returns.
  *  @return {boolean} Success of information parsing.
  */
-const
-    MEMO_TO = "co-in-memo",
-    MEMO_FROM = "co-in";
+
 function getAccount(accountName, amount, callback){
     //  Check if callback is a function
     if(typeof callback !== "function"){
@@ -728,3 +734,77 @@ function getAccount(accountName, amount, callback){
 }
 
 getAccount('anarchyhasnogods',50,(e,r)=>console.log(r));
+
+/**
+ *  @function populateTokens fills out tokens display
+ *  @arg {string} account Account name
+ *  @arg {number} amount Amount of memos to check for user info
+ */
+function populateTokens(account, amount=50){
+    getAccount(account, amount, (e,r)=>{
+        if(e) return false;
+        document.getElementById('tokens__amount-upvote').innerText = r["token-upvote-perm"];
+        document.getElementById('tokens__amount-post').innerText = r["adp_tok"];
+        document.getElementById('tokens__amount-ad').innerText = r["ad-token-perm"];
+    })
+}
+
+const
+    VERIFIER = "co-in",
+    VER_AMNT = 0.001;
+
+/**
+ *  @function verifyAccount
+ *  @arg {string} wif User's `wif` whatever that means
+ *  @arg {string} account User's account thing
+ *  @arg {function} callback Callback function to handle errors and returns.
+ */
+
+function verifyAccount(wif, account, callback){
+    //  Check if callback is a function (default to blank if not)
+    if(typeof callback !== "function"){
+        var callback = (e,r)=>{return 1};
+    }
+    //  Check if wif is a string
+    if(typeof wif !== "string"){
+        let e = `wif must be a string`;
+        callback(e, null);
+        throw new TypeError(e);
+        return false;
+    }
+    //  Check if account is a string
+    if(typeof account !== "string"){
+        let e = `account must be a string`
+        callback(e, null);
+        throw new TypeError(e);
+        return false;
+    }
+    //  Check cookies for blockchain-key
+    let c = document.cookie.match(/blockchain\-key=([A-z0-9]+)/);
+    //  Throw error if not found
+    if(c == null || c.length < 2){
+        throw new Error("'blockchain-key' not found.");
+        callback("'blockchain-key' not found.", null);
+        return false;
+    }
+    c = c[1];
+    let memo;
+    //  Catch errors on JSON stringify (really shouldn't be a problem but...)
+    try {
+        memo = JSON.stringify({"key": c});
+    } catch(e) {
+        callback(e, null);
+        return false;
+    }
+    //  Make call to steem.js
+    steem.broadcast.transfer(wif, account, VERIFIER, VER_AMNT, memo, (e,r)=>{
+        if(e !== null){
+            callback(e, null);
+            return false;
+        } else {
+            callback(null, r);
+            return true;
+        }
+    });
+    return true;
+}
